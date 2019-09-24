@@ -2,11 +2,11 @@
 /*
  *   CC BY-NC-AS UTA FabLab 2016-2018
  *   FabApp V 0.91
- *   Author: Sammy Hamwi
+ *   Author: Khari Thomas
  *
- *   Edited by Khari Thomas Fall 2019
- *	-Allow sheet_goods cart page to be viewed
+ *	-Allow cart page to be viewed
  *	 in a seperate window
+ *  -Allow any item to be added to the cart
  */
  //This will import all of the CSS and HTML code necessary to build the basic page
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
@@ -43,7 +43,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_material'])) {
     if(preg_match('/^[1-9]\d*$/', $new_amount) || $new_amount==0){
         if(Materials::update_sheet_quantity($inv_id_quantity, $new_amount)) {
             $_SESSION['success_msg'] = $mat->m_name." updated from ".$original_amount." On Hand to ".
-                                       $new_amount." On Hand". "KHARI!@!@!";
+                                       $new_amount." On Hand";
         } else {
             $_SESSION['error_msg'] = "Unable to update ".$mat->m_name;
         }
@@ -102,8 +102,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
         $temp_inv = $_SESSION['cart_array'][$v];
         if ($result = $mysqli->query("
                 SELECT *
-                FROM sheet_good_inventory SI JOIN materials M ON SI.m_id = M.m_id
-                WHERE SI.inv_id=$temp_inv AND SI.quantity != 0;
+                FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id
+                WHERE AI.inv_id=$temp_inv AND AI.quantity != 0;
         ")) {
             while ($row = $result->fetch_assoc()) {
                 $_SESSION['co_price'] = number_format((float)(((($row["width"]*$row["height"]) * $row["price"])* $_SESSION['co_quantity'][$v])+$_SESSION['co_price']), 2, '.', '');
@@ -169,8 +169,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
                                             $temp_v = $_SESSION['cart_array'][$ii];
                                             if ($result = $mysqli->query("
                                                     SELECT *
-                                                    FROM sheet_good_inventory SI JOIN materials M ON SI.m_id = M.m_id
-                                                    WHERE SI.inv_id=$temp_v AND SI.quantity != 0;
+                                                    FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id
+                                                    WHERE AI.inv_id=$temp_v AND AI.quantity != 0;
                                             ")) {
                                                 while ($row = $result->fetch_assoc()) { ?>
                                             <td>

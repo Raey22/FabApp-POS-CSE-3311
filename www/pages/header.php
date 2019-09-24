@@ -2,6 +2,10 @@
 <!--
  *   CC BY-NC-AS UTA FabLab 2016-2018
  *   FabApp V 0.91
+
+ *  Editted by Khari Thomas
+ *  Note:
+ *	 Uncomment or remove Sheet Goods tab
  -->
 <html lang="en">
 <head>
@@ -228,9 +232,10 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 									<li>
 										<a href="/pages/current_inventory.php"><i class="far fa-check-square"></i> Usable Inventory</a>
 									</li>
-									<li>
+									<!-- Uncomment me or delete me if no longer needed -->
+									<!-- <li>
 										<a href="/pages/sheet_goods.php"><i class="fas fa-square"></i> Sheet Goods</a>
-									</li>
+									</li> -->
 									<li>
 										<a href="/pages/all_goods.php"><i class="fas fa-square"></i> All Goods</a>
 									</li>

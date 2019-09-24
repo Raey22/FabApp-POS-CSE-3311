@@ -5,22 +5,8 @@
 *   Author: Khari Thomas
 */
 
-/* note: come back and erase unneeded code */
-
 //This will import all of the CSS and HTML code necessary to build the basic page
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
-
-if (!empty($_SESSION['sheet_ticket'])){
-  unset($_SESSION['sheet_ticket']);
-}
-
-// session_start();
-// //initialize cart if not set or is unset
-// if(!isset($_SESSION['cart_array'])){
-//     $_SESSION['cart_array'] = array();
-//     $_SESSION['co_quantity'] = array();
-//     $_SESSION['co_price'] = 0.0;
-// }
 
 //Submit results
 $resultStr = "";
@@ -31,7 +17,6 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
   header('Location: /index.php');
   exit();
 }
-
 
 ?>
 <html>
@@ -73,12 +58,11 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
                   <tbody>
                     <?php
 
-                    // edit query to pull different results for this page
-
+                    // Note: edit this query to pull different results for this page
                     if ($result = $mysqli->query("
-                    SELECT *
-                    FROM materials M
-                    WHERE M.price != 0;
+                      SELECT *
+                      FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id
+                      WHERE AI.quantity != 0;
                     ")) {
                       while ($row = $result->fetch_assoc()) { ?>
                         <tr class="tablerow">
@@ -108,11 +92,6 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
                 </div>
               </div>
             </div>
-            <!-- /.col-md-8 -->
-
-            <!-- Shopping Cart -->
-
-            <!-- /.col-md-4 -->
           </div>
         </div>
       </div>
@@ -135,33 +114,12 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
       });
     }
 
-    function Submitter(){
-
-      if (confirm("You are about to submit this query. Click OK to continue or CANCEL to quit.")){
-        return true;
-      }
-      return false;
-    }
-
-    // function edit_materials(inv_id, m_id, width, height){
-    //   if (Number.isInteger(m_id) && Number.isInteger(inv_id)){
-    //     if (window.XMLHttpRequest) {
-    //       // code for IE7+, Firefox, Chrome, Opera, Safari
-    //       xmlhttp = new XMLHttpRequest();
-    //     } else {
-    //       // code for IE6, IE5
-    //       xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    //     }
-    //     xmlhttp.onreadystatechange = function() {
-    //       if (this.readyState == 4 && this.status == 200) {
-    //         document.getElementById("material_modal").innerHTML = this.responseText;
-    //       }
-    //     };
-    //     xmlhttp.open("GET", "sub/edit_sheet.php?inv_id=" + inv_id + "&m_id=" + m_id + "&width=" + width + "&height=" + height, true);
-    //     xmlhttp.send();
-    //   }
+    // function Submitter(){
     //
-    //   $('#material_modal').modal('show');
+    //   if (confirm("You are about to submit this query. Click OK to continue or CANCEL to quit.")){
+    //     return true;
+    //   }
+    //   return false;
     // }
 
     </script>
