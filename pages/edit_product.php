@@ -66,8 +66,7 @@ function renderForm($id, $qty, $error)
               <input type="text" class="form-control" id="exampleInputqty" placeholder="Enter Quantity" name="quantity" value="<?php echo $qty; ?>">
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
           </form>
 
         </div>
