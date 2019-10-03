@@ -24,7 +24,7 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
   exit();
 }
 
-function renderForm($id, $qty, $error)
+function renderForm($id, $m_name, $price, $qty, $current, $measurable, $error)
 {
   ?>
   <html>
@@ -46,27 +46,63 @@ function renderForm($id, $qty, $error)
           }
           ?>
 
-          <!-- <form action="" method="post">
-            <input type="hidden" name="id" value="<?php echo $id; ?>"/>
-            <div>
-              <p><strong>ID:</strong> <?php echo $id; ?></p>
-              <strong>Quanity: *</strong> <input type="text" name="quantity" value="<?php echo $qty; ?>"/><br/>
-              <p>* Required</p>
-              <input type="submit" name="submit" value="Submit">
-            </div>
-          </form> -->
-
           <form action="" method="post">
             <input type="hidden" name="id" value="<?php echo $id; ?>"/>
             <div>
               <p><strong>ID:</strong> <?php echo $id; ?></p>
             </div>
-            <div class="form-group">
-              <label for="exampleInputqty">Quantity:</label>
-              <input type="text" class="form-control" id="exampleInputqty" placeholder="Enter Quantity" name="quantity" value="<?php echo $qty; ?>">
+            <div class="form-group col-lg-12">
+              <label for="materialName">Material Name:</label>
+              <input type="text" class="form-control" id="materialName" placeholder="Enter name" name="name" value="<?php echo $m_name; ?>">
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
-            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            <div class="form-group col-lg-4">
+              <label for="materialPrice">Price:</label>
+              <input type="text" class="form-control" id="materialPrice" placeholder="Enter price" name="price" value="<?php echo $price; ?>">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="materialCost">Material Cost:</label>
+              <input type="text" class="form-control" id="materialCost" placeholder="Enter cost" name="cost" value="">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <div class="form-group col-lg-12">
+              <label for="materialQty">Quantity:</label>
+              <input type="text" class="form-control" id="materialQty" placeholder="Enter quantity" name="quantity" value="<?php echo $qty; ?>">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+
+            <div class="form-group col-lg-4">
+              <label for="m_height">Height:</label>
+              <input type="text" class="form-control" id="m_height" placeholder="Enter height" name="height" value="">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="m_length">Length:</label>
+              <input type="text" class="form-control" id="m_length" placeholder="Enter length" name="length" value="">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="m_weight">Weight:</label>
+              <input type="text" class="form-control" id="m_weight" placeholder="Enter weight" name="weight" value="">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+
+
+            <div class="form-group col-lg-4">
+              <label for="currentInput">Current:</label>
+              <input type="text" class="form-control" id="currentInput" placeholder="Enter Quantity" name="current" value="<?php echo $current; ?>">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="measurableInput">Measurable:</label>
+              <input type="text" class="form-control" id="measurableInput" placeholder="Enter Quantity" name="measurable" value="<?php echo $measurable; ?>">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <div class="col-lg-12">
+              <input action="action" onclick="window.history.go(-1); return false;" class="btn" type="button" value="Cancel" />
+              <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            </div>
           </form>
 
         </div>
@@ -91,20 +127,27 @@ if (isset($_POST['submit']))
   {
     // get form data, making sure it is valid
     $id = $_POST['id'];
+    $m_name = mysql_real_escape_string(htmlspecialchars($_POST['m_name']));
+    $price = mysql_real_escape_string(htmlspecialchars($_POST['price']));
     $qty = mysql_real_escape_string(htmlspecialchars($_POST['quantity']));
 
-    // check that qty, fields are both filled in
+    // check that required fields are filled in
     if ($qty == '')
     {
       // generate error message
       $error = 'ERROR: Please fill in all required fields!';
       //error, display form
-      renderForm($id, $qty, $error);
+      renderForm($id, $m_name, $price, $qty, $current, $measurable, $error);
     }
     else
     {
       // save the data to the database;
-      $mysqli->query("UPDATE all_good_inventory SET quantity=$qty WHERE inv_id=$id") or die(mysql_error());
+      $mysqli->query("
+      UPDATE all_good_inventory
+      SET quantity=$qty
+      WHERE inv_id=$id
+      ")
+      or die(mysql_error());
       //check for errors here ^
 
       // once saved, redirect back to the view page
@@ -126,7 +169,7 @@ else
   {
     // query db
     $id = $_GET['id'];
-    $result = $mysqli->query("SELECT * FROM all_good_inventory WHERE inv_id=$id") or die(mysql_error());
+    $result = $mysqli->query("SELECT * FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id WHERE inv_id=$id") or die(mysql_error());
     $row = $result->fetch_assoc();
 
     // check that the 'id' matches up with a row in the databse
@@ -134,9 +177,14 @@ else
     {
       // get data from db
       $qty = $row['quantity'];
+      $m_name = $row['m_name'];
+      $price = $row['price'];
+      $current = $row['current'];
+      $measurable = $row['measurable'];
+
 
       // show form
-      renderForm($id, $qty, '');
+      renderForm($id, $m_name, $price, $qty, $current, $measurable, '');
 
     }
     else
