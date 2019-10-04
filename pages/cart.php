@@ -92,6 +92,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['endCartBtn'])) {
 }
 
 // Refresh button
+
+
+function sayHello() {
+  echo 'Hello Khari!';
+}
+
+
+// function calculateCart(){
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
   $_SESSION['co_price'] = 0.0;
   for ($i = 0; $i < sizeof($_SESSION['cart_array']); $i++) {
@@ -180,10 +188,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
                                   <?php echo ($row['width']." x ".$row['height']); ?>
                                 </td>
                                 <td>
-                                  <input type="number" name="cart_quantity<?php echo ($ii); ?>" id="cart_quantity<?php echo ($ii); ?>" max="<?php echo($row['quantity']); ?>" min="1" value="<?php echo ($_SESSION['co_quantity'][$ii]); ?>" step="1" placeholder="Enter Quantity" style="width:75%;"/>
+                                  <input type="number" name="shares" id="product" min="1" max="<?php echo($row['quantity']); ?>">
+                                  <!-- <input type="number" name="cart_quantity<?php echo ($ii); ?>" id="cart_quantity<?php echo ($ii); ?>" max="<?php echo($row['quantity']); ?>" min="1" value="<?php echo ($_SESSION['co_quantity'][$ii]); ?>" step="1" placeholder="Enter Quantity" style="width:75%;"/> -->
                                 </td>
                                 <td>
-                                  <?php echo ("$".number_format((float)((($row["width"]*$row["height"]) * $row["price"])* $_SESSION['co_quantity'][$ii]), 2, '.', '')); ?>
+                                  <span id="result"></span>
+                                  <!-- <?php echo ("$".number_format((float)((($row["width"]*$row["height"]) * $row["price"])* $_SESSION['co_quantity'][$ii]), 2, '.', '')); ?> -->
+
                                   <div class="pull-right"><a href="sub/delete_cart.php?id=<?php echo ("".$_SESSION['cart_array'][$ii]."&h=".$row['height']."&w=".$row['width']."&p=".$row['price']); ?>" class="btn btn-warning btn-xs" style="background-color: #FF7171;"><i class="fas fa-trash-alt"></i></a></div>
 
                                 </td>
@@ -232,6 +243,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
     include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
     ?>
     <script>
+
+    function calculate(w, h, p){
+      return (w * h * p);
+    }
+
+    $(document).ready(function(){
+      $('#product').change(function(){
+        var val = calculate();
+        $('#result').text($(this).val() * val);
+      });
+    });
+
+
+    function setUpHandlers(param1, param2) {
+      $(param1).mouseover(function(e){
+        var x = e.pageX - $("#container").offset().left;
+        var y = e.pageY - $("#container").offset().top;
+        $(param2).css({'top':y,'left':x}).show();
+      });
+      //etc etc
+    }
+
+    $(document).ready(function(){
+      //Ok, now set them up once
+      setUpHandlers('#foo1', '#div1');
+      setUpHandlers('#foo2', '#div2');
+    });
+
+
     var str;
     for(var i=1; i<= <?php echo $number_of_sheet_tables;?>; i++){
       str = "#sheetsTable_"+i

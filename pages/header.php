@@ -5,7 +5,7 @@
 
  *  Editted by Khari Thomas
  *  Note:
- *	 Uncomment or remove Sheet Goods tab
+ *	 Uncomment or remove Sheet Goods tab and associate files & database table
  -->
 <html lang="en">
 <head>
@@ -211,7 +211,7 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 				<div class="sidebar-nav navbar-collapse">
 					<ul class="nav" id="side-menu">
 						<li>
-							<a href="/index.php"><i class="fas fa-ticket-alt"></i> FabApp</a>
+							<a href="/index.php"><i class="fas fa-ticket-alt"></i> FabApp (Dashboard)</a>
 						</li>
 						<?php if (isset($staff) && $staff->getRoleID() >=  $sv['LvlOfStaff']) { ?>
 							<li>
@@ -223,7 +223,7 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 								<a href="#"><i class="fas fa-warehouse"></i> Inventory<span class="fas fa-angle-left"></span></a>
 								<ul class="nav nav-second-level">
 									<li>
-										<a href="/pages/inventory.php"><i class="fas fa-box"></i> On Hand</a>
+										<a href="/pages/inventory.php"><i class="fas fa-box"></i> On Hand (New Inventory)</a>
 									</li>
 									<li>
 										<a href="/pages/inventory_processing.php"><i class="fas fa-shipping-fast"></i> Edit Inventory</a>
@@ -237,12 +237,8 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 										<a href="/pages/sheet_goods.php"><i class="fas fa-square"></i> Sheet Goods</a>
 									</li> -->
 									<li>
-										<a href="/pages/all_goods.php"><i class="fas fa-square"></i> All Goods</a>
+										<a href="/pages/all_goods.php"><i class="fas fa-square"></i> Register</a>
 									</li>
-									<!-- Uncomment to put shopping cart here -->
-									<!-- <li>
-										<a href="/pages/cart.php"><i class="fas fa-square"></i> Shopping Cart</a>
-									</li> -->
 									<?php } ?>
 								</ul>
 								<!-- /.nav-second-level -->
