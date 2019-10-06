@@ -1,5 +1,12 @@
 <?php
 
+/*
+*   CC BY-NC-AS UTA FabLab 2016-2018
+*   FabApp V 0.91
+*   Author: Khari Thomas
+*
+*/
+
  //This will import all of the CSS and HTML code necessary to build the basic page
  include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 
@@ -15,11 +22,11 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>FabApp Inventory</title>
+		<title><?php echo $sv['site_name'];?> Inventory</title>
 	</head>
 	<body>
 		<div id="page-wrapper">
-			<h2>Inventory</h2>
+			<h1>Inventory</h1>
 			<div class="col-lg-12">
 				<p>Add, Edit, or Update materials here</p>
 			</div>

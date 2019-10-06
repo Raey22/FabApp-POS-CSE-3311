@@ -5,10 +5,10 @@
  *
  *	 edited by: MPZinke on 12.08.18
  *   edited by: Khari Thomas on 10.3.2019
+ *	 edited by: Raey Ageze on 10.4.2019
 
     Modify this file to be a generic show_inventory page
     which takes a group id or material name to run the query
-
 
  */
 
@@ -16,7 +16,7 @@ $LvlOfInventory = 9;  //TODO: find out actual level; change for all
 
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 
-// change inventory (possibly remove as obselete)
+
 if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead'] && isset($_POST['save_material'])) {
 	$m_id = filter_input(INPUT_POST, 'm_id');
 	$new_amount = filter_input(INPUT_POST, 'quantity');
@@ -55,10 +55,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 					<table class="table table-condensed" id="invTable">
 						<thead>
 							<tr>
+								<!-- Prevents edit access from unauthorized users -->
+								<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+									<th class='col-md-1'>Edit</th>
+								<? }?>
 								<th class='col-md-5'>Material Name</th>
                 <th class='col-md-3'>Product Number</th>
                 <th class='col-md-2'>Price</th>
-                <th class='col-md-2'>Quantity</th>
+                <th class='col-md-1'>Quantity</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -85,6 +89,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
             {
 							while ($row = $result->fetch_assoc()){ ?>
 								<tr>
+									<!-- Prevents edit access from unauthorized users -->
+									<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+										<td><a href="edit_product.php?id=<?php echo ("".$row['inv_id']); ?>"  class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a></td>
+									<? }?>
 									<td><?php echo $row['m_name']; ?></td>
 									<td><?php echo $row['product_number']; ?></td>
                   <td><?php echo $row['price']; ?></td>

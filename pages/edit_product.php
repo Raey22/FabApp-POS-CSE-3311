@@ -6,10 +6,9 @@
 *   Author: Khari Thomas
 *
 *   NOTE: This page needs to be updated to use prepared statements@@
-*   possibly add a sub modal between all_goods.php and this page to check whether a page exists
+*   possibly add a sub modal between show_inventory.php and this page to check whether a page exists
 *    e.g. id?=99
 *
-*   Add a success modal after succesful update so that the user knows whats going on
 *
 */
 
@@ -24,7 +23,12 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
   exit();
 }
 
-function renderForm($id, $m_name, $price, $qty, $current, $measurable, $error)
+// fire off modal & timer
+if($_SESSION['type'] == 'success'){
+	echo "<script type='text/javascript'> window.onload = function(){success()}</script>";
+}
+
+function renderForm($id, $m_name, $price, $qty, $height, $width, $weight, $current, $measurable, $error)
 {
   ?>
   <html>
@@ -58,7 +62,7 @@ function renderForm($id, $m_name, $price, $qty, $current, $measurable, $error)
             </div>
             <div class="form-group col-lg-4">
               <label for="materialPrice">Price:</label>
-              <input type="text" class="form-control" id="materialPrice" placeholder="Enter price" name="price" value="<?php echo $price; ?>">
+              <input type="text" class="form-control" id="materialPrice" placeholder="Enter price" name="price" value="<?php echo $price; ?>" readonly>
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
             <div class="form-group col-lg-4">
@@ -74,32 +78,44 @@ function renderForm($id, $m_name, $price, $qty, $current, $measurable, $error)
 
             <div class="form-group col-lg-4">
               <label for="m_height">Height:</label>
-              <input type="text" class="form-control" id="m_height" placeholder="Enter height" name="height" value="">
+              <input type="text" class="form-control" id="m_height" placeholder="Enter height" name="height" value="<?php echo $height; ?>">
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
             <div class="form-group col-lg-4">
-              <label for="m_length">Length:</label>
-              <input type="text" class="form-control" id="m_length" placeholder="Enter length" name="length" value="">
+              <label for="m_width">Width:</label>
+              <input type="text" class="form-control" id="m_width" placeholder="Enter width" name="width" value="<?php echo $width ?>">
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
             <div class="form-group col-lg-4">
               <label for="m_weight">Weight:</label>
-              <input type="text" class="form-control" id="m_weight" placeholder="Enter weight" name="weight" value="">
+              <input type="text" class="form-control" id="m_weight" placeholder="Enter weight" name="weight" value="<?php echo $weight ?>">
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
 
 
-            <div class="form-group col-lg-4">
-              <label for="currentInput">Current:</label>
-              <input type="text" class="form-control" id="currentInput" placeholder="Enter Quantity" name="current" value="<?php echo $current; ?>">
+            <!-- <div class="form-group col-lg-4">
+              <span><b>Current:</b></span>
+              <?php echo
+              "<td> <select class='form-control col-md-4' onchange='changeCurrent($mat_id, this)' style='width:100%;'>".
+                "<option value='Y'>Y</option>";
+              // display whether currently used material
+              if($current === 'N') echo "<option selected='selected' value='N'>N</option>";
+              else echo "<option value='N'>N</option>";
+              echo "</select> </td> </td> </tr>"; ?> -->
+
+              <!-- <input type="text" class="form-control" id="currentInput" placeholder="Enter Quantity" name="current" value="<?php echo $current; ?>"> -->
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-            </div>
+            <!-- </div> -->
             <div class="form-group col-lg-4">
               <label for="measurableInput">Measurable:</label>
               <input type="text" class="form-control" id="measurableInput" placeholder="Enter Quantity" name="measurable" value="<?php echo $measurable; ?>">
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
             <div class="col-lg-12">
+              <div class="form-group">
+                <label for="reasonInput">Reason for Update</label>
+                <textarea class="form-control" id="reasonInput" rows="2" required></textarea>
+              </div>
               <input action="action" onclick="window.history.go(-1); return false;" class="btn" type="button" value="Cancel" />
               <button type="submit" name="submit" class="btn btn-primary">Submit</button>
             </div>
@@ -130,6 +146,9 @@ if (isset($_POST['submit']))
     $m_name = mysql_real_escape_string(htmlspecialchars($_POST['m_name']));
     $price = mysql_real_escape_string(htmlspecialchars($_POST['price']));
     $qty = mysql_real_escape_string(htmlspecialchars($_POST['quantity']));
+    $height = mysql_real_escape_string(htmlspecialchars($_POST['height']));
+    $width = mysql_real_escape_string(htmlspecialchars($_POST['width']));
+    $weight = mysql_real_escape_string(htmlspecialchars($_POST['weight']));
 
     // check that required fields are filled in
     if ($qty == '')
@@ -137,21 +156,21 @@ if (isset($_POST['submit']))
       // generate error message
       $error = 'ERROR: Please fill in all required fields!';
       //error, display form
-      renderForm($id, $m_name, $price, $qty, $current, $measurable, $error);
+      renderForm($id, $m_name, $price, $qty, $height, $width, $weight, $current, $measurable, $error);
     }
     else
     {
       // save the data to the database;
       $mysqli->query("
       UPDATE all_good_inventory
-      SET quantity=$qty
+      SET quantity=$qty, weight=$weight, height=$height, width=$width
       WHERE inv_id=$id
       ")
       or die(mysql_error());
       //check for errors here ^
 
       // once saved, redirect back to the view page
-      header("Location: all_goods.php");
+      header("Location: show_inventory.php");
     }
   }
   else
@@ -181,10 +200,15 @@ else
       $price = $row['price'];
       $current = $row['current'];
       $measurable = $row['measurable'];
+      $height = $row['height'];
+      $width = $row['width'];
+      $weight = $row['weight'];
+
+      $mat_id = $row['m_id'];
 
 
       // show form
-      renderForm($id, $m_name, $price, $qty, $current, $measurable, '');
+      renderForm($id, $m_name, $price, $qty, $height, $width, $weight, $current, $measurable, '');
 
     }
     else
@@ -201,3 +225,77 @@ else
   }
 }
 ?>
+
+<?php
+
+// fire off modal & timer
+if($_SESSION['type'] == 'success'){
+	echo "<script type='text/javascript'> window.onload = function(){success()}</script>";
+}
+
+?>
+
+<div id="page-wrapper">
+  <span><b>Current:</b></span>
+	<div class="col-md-12">
+    <table class="table table-condensed col-md-12">
+
+      <!-- display all materials -->
+      <tbody>
+        <?php if($result = $mysqli->query("SELECT `m_id`, `m_name`, `current`
+                           FROM `materials`
+                           WHERE `m_id` = $mat_id
+                           ORDER BY `m_name`
+        ")) {
+          while($row = $result->fetch_assoc()) {
+            echo
+            "<td> <select class='form-control col-md-4' onchange='changeCurrent($mat_id, this)' style='width:100%;'>".
+              "<option value='Y'>Y</option>";
+            // display whether currently used material
+            if($current === 'N') echo "<option selected='selected' value='N'>N</option>";
+            else echo "<option value='N'>N</option>";
+            echo "</select> </td> </td> </tr>";
+          }
+        }
+        else {
+          echo "Unable to get table";
+        } ?>
+        </tbody>
+    </table>
+	</div>
+<!-- Display changes of inventory based on item selected; maybe new page? -->
+</div>
+<div id="modal" class="modal">
+</div>
+
+
+<script>
+
+	// AJAX call to change_current.php to change status; fills modal w/ success msg
+	function changeCurrent(id, element) {
+		var val = element.value;
+		console.log(id, val);
+		// AJAX call
+		if (window.XMLHttpRequest) {
+			// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else {
+			// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				document.getElementById("modal").innerHTML = this.responseText;
+			}
+		};
+		xmlhttp.open("GET", "sub/change_current.php?id=" +id+ "|" + val, true);
+		xmlhttp.send();
+		$("#modal").show();
+	}
+
+	// close modal buttons were not working
+	function dismiss_modal() {
+		$("#modal").hide();
+	}
+
+</script>

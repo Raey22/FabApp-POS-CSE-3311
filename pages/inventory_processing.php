@@ -217,11 +217,11 @@ function successful_and_failed_device_group_additions($m_id, $device_group) {
 
 ?>
 
-<title><?php echo $sv['site_name'];?> Edit Inventory</title>
+<title><?php echo $sv['site_name'];?> Manage Inventory</title>
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">Edit Inventory</h1>
+			<h1 class="page-header">Manage Inventory</h1>
 		</div>
 	</div>
 
@@ -430,7 +430,7 @@ function successful_and_failed_device_group_additions($m_id, $device_group) {
 		</div>
 	<?php } ?>
 
-	<!-- Manage Sheet Good inventory -->	
+	<!-- Manage Sheet Good inventory -->
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<button class='btn btn-default' style='right: 10px;' type='button' data-toggle='collapse' data-target='.sheet_inventory_collapse'
