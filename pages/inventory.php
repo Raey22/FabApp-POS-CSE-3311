@@ -1,5 +1,12 @@
 <?php
 
+/*
+*   CC BY-NC-AS UTA FabLab 2016-2018
+*   FabApp V 0.91
+*   Author: Khari Thomas & Raey Ageze
+*
+*/
+
  //This will import all of the CSS and HTML code necessary to build the basic page
  include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 
@@ -30,7 +37,7 @@
 					<div class="caption">
 						<h3>Sheet Goods</h3>
 						<p>Our sheet goods ...</p>
-						<p><a href="sheet_goods_category.php" class="btn btn-primary" role="button">See items</a> 
+						<p><a href="sheet_goods_category.php" class="btn btn-primary" role="button">See items</a>
 						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 						<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
 						<? }?>	</div>
@@ -42,9 +49,9 @@
 						<h3>ABS</h3>
 						<p>Our ABS...</p>
 						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
-							<a href="#" class="btn btn-default" role="button">Edit Category</a></p>		
+							<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
 						<? }?>
-								
+
 						<p>
 						<?php
                         $result = $mysqli->query("SELECT m_id FROM materials WHERE m_name = 'ABS (Generic)'");
@@ -75,7 +82,7 @@
 					<div class="caption">
 						<h3>Screen Ink</h3>
 						<p>Our Screen Ink...</p>
-						<p><a href="show_inventory.php?inventory=Screen+Ink" class="btn btn-primary" role="button">See items</a> 
+						<p><a href="show_inventory.php?inventory=Screen+Ink" class="btn btn-primary" role="button">See items</a>
 						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 						<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
 						<? }?></div>
@@ -86,7 +93,7 @@
 					<div class="caption">
 						<h3>Ninja Flex</h3>
 						<p>Our Ninja Flex...</p>
-						<p><a href="show_inventory.php?inventory=Ninja+Flex" class="btn btn-primary" role="button">See items</a> 
+						<p><a href="show_inventory.php?inventory=Ninja+Flex" class="btn btn-primary" role="button">See items</a>
 						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 						<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
 						<? }?>
@@ -98,27 +105,25 @@
 					<div class="caption">
 						<h3>Other</h3>
 						<p>Other items...</p>
-						<p><a href="show_inventory.php?inventory=Other" class="btn btn-primary" role="button">See items</a> 
+						<p><a href="show_inventory.php?inventory=Other" class="btn btn-primary" role="button">See items</a>
 						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?><a href="#" class="btn btn-default" role="button">Edit Category</a></p>
 						<? }?>
 					</div>
 					</div>
 				</div>
-				
+
 			</div>
 			<div >
-			
+
 				<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 					<a href="#" class="btn btn-default" role="button"><i class="fas fa-plus"></i> Add Category</a>
 				<? }?>
-				
-						
-				
+
+
+
 			</div>
-				
+
 			</div>
-			
-			
 
 
 	</body>

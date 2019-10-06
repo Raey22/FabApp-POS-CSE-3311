@@ -5,9 +5,7 @@
  *
  *	 edited by: MPZinke on 12.08.18
  *   edited by: Khari Thomas on 10.3.2019
-
- 		Possibly change this file so that all materials (even if current = 'N')
-		will show in the table
+ *	 edited by: Raey Ageze on 10.4.2019
 
     Modify this file to be a generic show_inventory page
     which takes a group id or material name to run the query
@@ -36,6 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 	header("Location:inventory.php");
 }
 
+
 ?>
 <title><?php echo $sv['site_name'];?> Inventory</title>
 <div id="page-wrapper">
@@ -57,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 					<table class="table table-condensed" id="invTable">
 						<thead>
 							<tr>
-								<!-- Prevents access from unauthorized users -->
+								<!-- Prevents edit access from unauthorized users -->
 								<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 									<th class='col-md-1'>Edit</th>
 								<? }?>
@@ -86,13 +85,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 			//Change this query to be dynamic
 			//TODO: input sanitation
 			$query = "SELECT * FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id WHERE M.m_parent = '{$_GET['id']}'";
-			
+
 			if($result = $mysqli->query($query
             ))
             {
 							while ($row = $result->fetch_assoc()){ ?>
 								<tr>
-									<!-- Prevents access from unauthorized users -->
+									<!-- Prevents edit access from unauthorized users -->
 									<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 										<td><a href="edit_product.php?id=<?php echo ("".$row['inv_id']); ?>"  class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a></td>
 									<? }?>
