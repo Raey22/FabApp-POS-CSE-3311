@@ -36,13 +36,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 	header("Location:inventory.php");
 }
 
-
 ?>
 <title><?php echo $sv['site_name'];?> Inventory</title>
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">Inventory</h1>
+			<h1 class="page-header"> <?php if(isset($_GET['inventory']))
+			echo $_GET['inventory']; ?> Inventory</h1>
 		</div>
 		<!-- /.col-md-12 -->
 	</div>
@@ -83,11 +83,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
             // WHERE M.measurable = 'Y'
             // AND M.current = 'Y'
 
-            //Change this query to be dynamic
-            if($result = $mysqli->query("
-              SELECT *
-              FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id
-            "))
+			//Change this query to be dynamic
+			//TODO: input sanitation
+			$query = "SELECT * FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id WHERE M.m_parent = '{$_GET['id']}'";
+			
+			if($result = $mysqli->query($query
+            ))
             {
 							while ($row = $result->fetch_assoc()){ ?>
 								<tr>
