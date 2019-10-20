@@ -5,6 +5,7 @@
  *
  *	 edited by: MPZinke on 12.08.18
  *   edited by: Khari Thomas on 10.3.2019
+ * 	 edited by: Raey Ageze on 10.6.2019
 
  		Possibly change this file so that all materials (even if current = 'N')
 		will show in the table
@@ -51,8 +52,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fas fa-warehouse fa-fw"></i> Inventory
+				<a href = "inventory.php" class="btn" style="padding:0;"><i class="fas fa-warehouse fa-fw"></i> Inventory</a>
+					<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+				<a href="add_material.php" class="btn" style="float:right; padding:0;"><i class="fas fa-plus"></i> Add Material</a>
+			<? }?>
 				</div>
+				
 				<div class="panel-body">
 					<table class="table table-condensed" id="invTable">
 						<thead>
@@ -61,9 +66,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 								<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 									<th class='col-md-1'>Edit</th>
 								<? }?>
-								<th class='col-md-5'>Material Name</th>
-                <th class='col-md-3'>Product Number</th>
-                <th class='col-md-2'>Price</th>
+								<th class='col-md-4'>Material Name</th>
+                <th class='col-md-2'>Product Number</th>
+                <th class='col-md-1'>Price</th>
+				<th class='col-md-1'>Weight</th>
+				<th class='col-md-1'>Height</th>
+				<th class='col-md-1'>Width</th>
                 <th class='col-md-1'>Quantity</th>
 							</tr>
 						</thead>
@@ -85,11 +93,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 
 			//Change this query to be dynamic
 			//TODO: input sanitation
-			$query = "SELECT * FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id WHERE M.m_parent = '{$_GET['id']}'";
 			
+			$query = "SELECT * FROM categories AS C INNER JOIN materials AS M ON C.c_id = M.c_id INNER JOIN all_good_inventory AS I ON I.m_id = M.m_id WHERE M.c_id = {$_GET['id']}";
 			if($result = $mysqli->query($query
+			
             ))
             {
+				
 							while ($row = $result->fetch_assoc()){ ?>
 								<tr>
 									<!-- Prevents access from unauthorized users -->
@@ -98,13 +108,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 									<? }?>
 									<td><?php echo $row['m_name']; ?></td>
 									<td><?php echo $row['product_number']; ?></td>
-                  <td><?php echo $row['price']; ?></td>
+                  					<td><?php echo $row['price']; ?></td>
+									<td><?php echo $row['width']; ?></td>
+									<td><?php echo $row['height']; ?></td>
+									<td><?php echo $row['weight']; ?></td>
 									<td><?php echo $row['quantity']; ?></td>
 								</tr>
 							<?php }
 						} else { ?>
 							<tr><td colspan="3">None</td></tr>
-						<?php } ?>
+		
+						<?php } 
+						?>
+						
 						</tbody>
 					</table>
 				</div>
