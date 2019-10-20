@@ -1,5 +1,12 @@
 <?php
 
+/*
+*   CC BY-NC-AS UTA FabLab 2016-2018
+*   FabApp V 0.91
+*   Author: Khari Thomas & Raey Ageze
+*
+*/
+
  //This will import all of the CSS and HTML code necessary to build the basic page
  include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 
@@ -87,17 +94,15 @@
 				
 			</div>
 			<div >
-			
+
 				<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 					<a href="add_category.php" class="btn btn-default" role="button"><i class="fas fa-plus"></i>  Add Category</a>
 				<? }?>
 					
 				
 			</div>
-				
+
 			</div>
-			
-			
 
 
 	</body>

@@ -3,10 +3,7 @@
 *   CC BY-NC-AS UTA FabLab 2016-2018
 *   FabApp V 0.91
 *   Author: Khari Thomas
-*
-*	-Allow cart page to be viewed
-*	 in a seperate window
-*  -Allow any item to be added to the cart
+
 */
 //This will import all of the CSS and HTML code necessary to build the basic page
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
@@ -92,14 +89,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['endCartBtn'])) {
 }
 
 // Refresh button
-
-
-function sayHello() {
-  echo 'Hello Khari!';
-}
-
-
-// function calculateCart(){
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
   $_SESSION['co_price'] = 0.0;
   for ($i = 0; $i < sizeof($_SESSION['cart_array']); $i++) {
@@ -188,15 +177,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
                                   <?php echo ($row['width']." x ".$row['height']); ?>
                                 </td>
                                 <td>
-                                  <input type="number" name="shares" id="product" min="1" max="<?php echo($row['quantity']); ?>">
-                                  <!-- <input type="number" name="cart_quantity<?php echo ($ii); ?>" id="cart_quantity<?php echo ($ii); ?>" max="<?php echo($row['quantity']); ?>" min="1" value="<?php echo ($_SESSION['co_quantity'][$ii]); ?>" step="1" placeholder="Enter Quantity" style="width:75%;"/> -->
+                                  <input type=number name="cart_quantity<?php echo ($ii); ?>" id="cart_quantity<?php echo ($ii); ?>" max="<?php echo($row['quantity']); ?>" min="1" class="example" value="<?php echo ($_SESSION['co_quantity'][$ii]); ?>" step="1" placeholder="Enter Quantity" style="width:75%;"/>
                                 </td>
                                 <td>
-                                  <span id="result"></span>
-                                  <!-- <?php echo ("$".number_format((float)((($row["width"]*$row["height"]) * $row["price"])* $_SESSION['co_quantity'][$ii]), 2, '.', '')); ?> -->
-
+                                  <?php echo ("$".number_format((float)((($row["width"]*$row["height"]) * $row["price"])* $_SESSION['co_quantity'][$ii]), 2, '.', '')); ?>
                                   <div class="pull-right"><a href="sub/delete_cart.php?id=<?php echo ("".$_SESSION['cart_array'][$ii]."&h=".$row['height']."&w=".$row['width']."&p=".$row['price']); ?>" class="btn btn-warning btn-xs" style="background-color: #FF7171;"><i class="fas fa-trash-alt"></i></a></div>
-
                                 </td>
                               <?php } } ?>
                             </tr>
@@ -204,7 +189,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
                           <tr>
                             <td></td><td></td><td><div class="pull-right"><b>Total:</b></div></td>
                             <td>
-                              <b><?php echo ("$".$_SESSION['co_price']); ?></b>&nbsp;&nbsp;<div class="pull-right"><button type="submit" class="btn btn-success btn-xs" name="refreshBtn" style="background-color: #41BC11;"><i class="fas fa-sync-alt"></i></button></div>
+                              <b><?php echo ("$".$_SESSION['co_price']); ?></b><div class="pull-right"><button id="myBtn" type="submit" style="display: none;" class="btn btn-success btn-xs" name="refreshBtn" style="background-color: #41BC11;"><i class="fas fa-sync-alt"></i></button></div>
                             </td>
                           </tr>
                         <?php } else { ?>
@@ -244,33 +229,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
     ?>
     <script>
 
-    function calculate(w, h, p){
-      return (w * h * p);
+    /* Auto cart update function */
+    // Get your element references just once:
+    let input = document.querySelector("input.example");
+    let btn = document.getElementById("myBtn");
+
+    // Register event handlers
+    input.addEventListener("keyup", myFunction);
+    input.addEventListener("input", myFunction);
+
+    function myFunction() {
+      if(input.value > 0) {
+        document.getElementById("myBtn").click();
+      }
     }
-
-    $(document).ready(function(){
-      $('#product').change(function(){
-        var val = calculate();
-        $('#result').text($(this).val() * val);
-      });
-    });
-
-
-    function setUpHandlers(param1, param2) {
-      $(param1).mouseover(function(e){
-        var x = e.pageX - $("#container").offset().left;
-        var y = e.pageY - $("#container").offset().top;
-        $(param2).css({'top':y,'left':x}).show();
-      });
-      //etc etc
-    }
-
-    $(document).ready(function(){
-      //Ok, now set them up once
-      setUpHandlers('#foo1', '#div1');
-      setUpHandlers('#foo2', '#div2');
-    });
-
+    //
 
     var str;
     for(var i=1; i<= <?php echo $number_of_sheet_tables;?>; i++){

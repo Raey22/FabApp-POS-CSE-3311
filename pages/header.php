@@ -6,6 +6,8 @@
  *  Editted by Khari Thomas
  *  Note:
  *	 Uncomment or remove Sheet Goods tab and associate files & database table
+ *	 Uncomment or remove Usable Inventory tab (and associate files & database table)*
+ *     ^ files may not need to be removed since code is being reused
  -->
 <html lang="en">
 <head>
@@ -211,7 +213,7 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 				<div class="sidebar-nav navbar-collapse">
 					<ul class="nav" id="side-menu">
 						<li>
-							<a href="/index.php"><i class="fas fa-ticket-alt"></i> FabApp (Dashboard)</a>
+							<a href="/index.php"><i class="fas fa-ticket-alt"></i> Dashboard</a>
 						</li>
 						<?php if (isset($staff) && $staff->getRoleID() >=  $sv['LvlOfStaff']) { ?>
 							<li>
@@ -220,18 +222,18 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 						<?php }
 						if(isset($staff) && $staff->getRoleID() >= $sv['LvlOfLead']) { ?>
 							<li>
-								<a href="#"><i class="fas fa-warehouse"></i> Inventory<span class="fas fa-angle-left"></span></a>
+								<a href="#"><i class="fas fa-warehouse"></i> inventory Group<span class="fas fa-angle-left"></span></a>
 								<ul class="nav nav-second-level">
 									<li>
-										<a href="/pages/inventory.php"><i class="fas fa-box"></i> On Hand (New Inventory)</a>
+										<a href="/pages/inventory.php"><i class="fas fa-box"></i> Inventory</a>
 									</li>
 									<li>
-										<a href="/pages/inventory_processing.php"><i class="fas fa-shipping-fast"></i> Edit Inventory</a>
+										<a href="/pages/inventory_processing.php"><i class="fas fa-shipping-fast"></i> Manage Inventory</a>
 									</li>
-									<?php if(isset($staff) && $staff->getRoleID() >= $sv['minRoleTrainer']) { ?>
+									<!-- <?php if(isset($staff) && $staff->getRoleID() >= $sv['minRoleTrainer']) { ?>
 									<li>
 										<a href="/pages/current_inventory.php"><i class="far fa-check-square"></i> Usable Inventory</a>
-									</li>
+									</li> -->
 									<!-- Uncomment me or delete me if no longer needed -->
 									<!-- <li>
 										<a href="/pages/sheet_goods.php"><i class="fas fa-square"></i> Sheet Goods</a>

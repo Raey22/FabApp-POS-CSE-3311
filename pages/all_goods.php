@@ -3,6 +3,8 @@
 *   CC BY-NC-AS UTA FabLab 2016-2018
 *   FabApp V 0.91
 *   Author: Khari Thomas
+
+*   Check if query should include M.measurable = 'Y'
 */
 
 //This will import all of the CSS and HTML code necessary to build the basic page
@@ -69,7 +71,7 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
                     if ($result = $mysqli->query("
                     SELECT *
                     FROM all_good_inventory AI JOIN materials M ON AI.m_id = M.m_id
-                    WHERE AI.quantity != 0;
+                    WHERE AI.quantity !=0  AND M.current='Y'
                     ")) {
                       while ($row = $result->fetch_assoc()) { ?>
                         <!-- Name -->
