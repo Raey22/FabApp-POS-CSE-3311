@@ -31,75 +31,96 @@
 				<p>Add, Edit, or Update materials here</p>
 			</div>
 			<!-->  <!-->
+			<div class="row" style="padding-top: 3px;">
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+					<div class="caption">
+						<h3>Sheet Goods</h3>
+						<p>Our sheet goods ...</p>
+						<p><a href="sheet_goods_category.php" class="btn btn-primary" role="button">See items</a>
+						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+						<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
+						<? }?>	</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+					<div class="caption">
+						<h3>ABS</h3>
+						<p>Our ABS...</p>
+						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+							<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
+						<? }?>
 
-			<?php
-			
-				$query = "SELECT * FROM `categories` WHERE c_parent IS NULL";
-				if($result = $mysqli->query($query))
-				{?>
-				<div class="row" style="padding-top: 3px;">
-					<?php
-					
-					//fetch every category from the category page and display it as a thumbnail
-					while ($row = $result->fetch_assoc()){ ?>
-									
-									
-				
-						<div class="col-sm-6 col-md-4" >
-						
-							<div class="thumbnail" style="background-color:#afbfd6;" onMouseOver="this.style.background='#dbdcdd'" onmouseout="this.style.background='#afbfd6'">
-							<div class="caption" style="color:white;">
-								<h3><?php echo $row['c_name'];?></h3>
-								
-								<?php
-								$q = "SELECT * FROM `categories` WHERE c_parent = ". $row['c_id'];
-								$res = $mysqli->query($q);
-								if($res->num_rows > 0)
-								{
-									
-									echo "<a href='sub_category.php?category=$row[c_name]&id=".$row[c_id]."' class='btn btn-primary' role='button' style='margin:2px;'>See items</a>";
-								
-								
-								}
-					
-								else
-								{
-						
-									echo "<a href='show_inventory.php?inventory=$row[c_name]&id=".$row[c_id]."' class='btn btn-primary' role='button' style='margin:2px;'> See items </a>";?>
-								
-								<?php
-								}
-					
-											 if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { 
-											echo "<a href='edit_category.php?id=".$row[c_id]."' class='btn btn-default' role='button' style='margin:2px;'> Edit Category</a>";?></p>
-											<? }
-											else
-											?>
-												</p>
+						<p>
+						<?php
+                        $result = $mysqli->query("SELECT m_id FROM materials WHERE m_name = 'ABS (Generic)'");
+                        $row = $result->fetch_assoc();
+                        echo "<a href='show_inventory.php?inventory=ABS&id=".$row[m_id]."' class='btn btn-primary' role='button'>See items</a>";?>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+					<div class="caption">
+						<h3>Vinyl</h3>
+						<p>Our Vinyl...</p>
+						<p>
+						<?php
+                        $result = $mysqli->query("SELECT m_id FROM materials WHERE m_name = 'Vinyl (Generic)'");
+                        $row = $result->fetch_assoc();
+                        echo "<a href='show_inventory.php?inventory=Vinyl&id=".$row[m_id]."' class='btn btn-primary' role='button'>See items</a>";?>
+						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+						<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
+						<? }?></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+					<div class="caption">
+						<h3>Screen Ink</h3>
+						<p>Our Screen Ink...</p>
+						<p><a href="show_inventory.php?inventory=Screen+Ink" class="btn btn-primary" role="button">See items</a>
+						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+						<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
+						<? }?></div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+					<div class="caption">
+						<h3>Ninja Flex</h3>
+						<p>Our Ninja Flex...</p>
+						<p><a href="show_inventory.php?inventory=Ninja+Flex" class="btn btn-primary" role="button">See items</a>
+						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
+						<a href="#" class="btn btn-default" role="button">Edit Category</a></p>
+						<? }?>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+					<div class="caption">
+						<h3>Other</h3>
+						<p>Other items...</p>
+						<p><a href="show_inventory.php?inventory=Other" class="btn btn-primary" role="button">See items</a>
+						<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?><a href="#" class="btn btn-default" role="button">Edit Category</a></p>
+						<? }?>
+					</div>
+					</div>
+				</div>
 
-												
-											</div>
-										</div>
-											
-									</div>
-								<?php }
-							}	
-							else { ?>
-								</div>
-								None
-								
-							<?php } 
-							?>
-			
-				
 			</div>
 			<div >
 
 				<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
-					<a href="add_category.php" class="btn btn-default" role="button"><i class="fas fa-plus"></i>  Add Category</a>
+					<a href="#" class="btn btn-default" role="button"><i class="fas fa-plus"></i> Add Category</a>
+          <a href="create_parent_material.php" class="btn btn-default" role="button"><i class="fas fa-plus"></i> Add New Parent Material</a>
+          <a href="create_product.php" class="btn btn-default" role="button"><i class="fas fa-plus"></i> Add New Item</a>
 				<? }?>
-					
-				
+
 			</div>
 
 			</div>

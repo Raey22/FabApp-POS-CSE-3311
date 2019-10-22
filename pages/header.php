@@ -217,18 +217,24 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 						</li>
 						<?php if (isset($staff) && $staff->getRoleID() >=  $sv['LvlOfStaff']) { ?>
 							<li>
+								<a href="/pages/all_goods.php"><i class="fas fa-square"></i> Register</a>
+							</li>
+							<li>
+								<a href="/test/index.php"><i class="fas fa-square"></i> Test Dashboard</a>
+							</li>
+							<li>
 								<a href="/admin/error.php"><i class="fas fa-bolt"></i> Error</a>
 							</li>
 						<?php }
-						if(isset($staff) && $staff->getRoleID() >= $sv['LvlOfLead']) { ?>
+						if(isset($staff) && $staff->getRoleID() >= $sv['LvlOfStaff']) { ?>
 							<li>
-								<a href="#"><i class="fas fa-warehouse"></i> inventory Group<span class="fas fa-angle-left"></span></a>
+								<a href="#"><i class="fas fa-warehouse"></i> Inventory<span class="fas fa-angle-left"></span></a>
 								<ul class="nav nav-second-level">
 									<li>
-										<a href="/pages/inventory.php"><i class="fas fa-box"></i> Inventory</a>
+										<a href="/pages/inventory.php"><i class="fas fa-box"></i> Current Inventory</a>
 									</li>
 									<li>
-										<a href="/pages/inventory_processing.php"><i class="fas fa-shipping-fast"></i> Manage Inventory</a>
+										<a href="/pages/inventory_processing.php"><i class="fas fa-plus"></i> Add Inventory</a>
 									</li>
 									<!-- <?php if(isset($staff) && $staff->getRoleID() >= $sv['minRoleTrainer']) { ?>
 									<li>
@@ -238,9 +244,6 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 									<!-- <li>
 										<a href="/pages/sheet_goods.php"><i class="fas fa-square"></i> Sheet Goods</a>
 									</li> -->
-									<li>
-										<a href="/pages/all_goods.php"><i class="fas fa-square"></i> Register</a>
-									</li>
 									<?php } ?>
 								</ul>
 								<!-- /.nav-second-level -->
