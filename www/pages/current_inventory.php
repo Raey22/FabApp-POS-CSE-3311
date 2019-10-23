@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**************************************************
 *
@@ -85,7 +85,7 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 ?>
 
 
-<script> 
+<script>
 	$('#mats').DataTable();
 
 	// AJAX call to change_current.php to change status; fills modal w/ success msg

@@ -7,9 +7,6 @@
  *   edited by: Khari Thomas on 10.3.2019
  *	 edited by: Raey Ageze on 10.4.2019
 
-    Modify this file to be a generic show_inventory page
-    which takes a group id or material name to run the query
-
  */
 
 $LvlOfInventory = 9;  //TODO: find out actual level; change for all
@@ -50,12 +47,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-				<a href = "inventory.php" class="btn" style="padding:0;"><i class="fas fa-warehouse fa-fw"></i> Inventory</a>
-					<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
-				<a href="add_material.php" class="btn" style="float:right; padding:0;"><i class="fas fa-plus"></i> Add Material</a>
-			<? }?>
+					<i class="fas fa-warehouse fa-fw"></i> Inventory
 				</div>
-				
 				<div class="panel-body">
 					<table class="table table-condensed" id="invTable">
 						<thead>
@@ -64,9 +57,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 								<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 									<th class='col-md-1'>Edit</th>
 								<? }?>
+<<<<<<< HEAD
 								<th class='col-md-4'>Material Name</th>
                 <th class='col-md-2'>Product Number</th>
                 <th class='col-md-1'>Price</th>
+=======
+								<th class='col-md-5'>Material Name</th>
+                <th class='col-md-3'>Product Number</th>
+                <th class='col-md-2'>Price</th>
+>>>>>>> 34f8741f24baf4f1f94649c2057bee3aff10f8d2
                 <th class='col-md-1'>Quantity</th>
 							</tr>
 						</thead>
@@ -91,10 +90,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 			
 			$query = "SELECT * FROM categories AS C INNER JOIN materials AS M ON C.c_id = M.c_id WHERE M.c_id = {$_GET['id']}";
 			if($result = $mysqli->query($query
-			
             ))
             {
-				
 							while ($row = $result->fetch_assoc()){ ?>
 								<tr>
 									<!-- Prevents edit access from unauthorized users -->
@@ -109,10 +106,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 							<?php }
 						} else { ?>
 							<tr><td colspan="3">None</td></tr>
-		
-						<?php } 
-						?>
-						
+						<?php } ?>
 						</tbody>
 					</table>
 				</div>
