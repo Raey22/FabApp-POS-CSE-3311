@@ -38,18 +38,31 @@
 					
 					//fetch every category from the category page and display it as a thumbnail
 					while ($row = $result->fetch_assoc()){ ?>
-									
-									
-				
+					<?php
+						$q = "SELECT * FROM `categories` WHERE c_parent = ". $row['c_id'];
+						$res = $mysqli->query($q);	
+					?>
 						<div class="col-sm-6 col-md-4" >
 						
-							<div class="thumbnail" style="background-color:#afbfd6;" onMouseOver="this.style.background='#dbdcdd'" onmouseout="this.style.background='#afbfd6'">
+						<div class="thumbnail" style="background-color:#afbfd6;"" onMouseOver="this.style.background='#dbdcdd'" onmouseout="this.style.background='#afbfd6'" onclick="window.location.href=<?php 
+								if($res->num_rows > 0)
+								{
+									echo "'sub_category.php?category=$row[c_name]&id=".$row[c_id]."'";
+								
+								}
+								//if there are no subcategories every inventory should be listed
+								else
+								{
+									echo "'show_inventory.php?inventory=$row[c_name]&id=".$row[c_id]."'";
+					
+								
+								}
+								?>">
 							<div class="caption" style="color:white;">
 								<h3><?php echo $row['c_name'];?></h3>
 								
 								<?php
-								$q = "SELECT * FROM `categories` WHERE c_parent = ". $row['c_id'];
-								$res = $mysqli->query($q);
+							
 								if($res->num_rows > 0)
 								{
 									
