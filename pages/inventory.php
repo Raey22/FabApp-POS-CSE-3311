@@ -34,16 +34,16 @@
 
 			<?php
 			
+				//Select all parent categories
 				$query = "SELECT * FROM `categories` WHERE c_parent IS NULL";
 				if($result = $mysqli->query($query))
 				{?>
 				<div class="row" style="padding-top: 3px;">
 					<?php
 					
-					//fetch every category from the category page and display it as a thumbnail
+					//fetch every category from the category table and display it as a thumbnail
 					while ($row = $result->fetch_assoc()){ ?>
-									
-									
+						
 				
 						<div class="col-sm-6 col-md-4" >
 						
@@ -52,19 +52,18 @@
 								<h3><?php echo $row['c_name'];?></h3>
 								
 								<?php
+								//check if any of the parnet catgories have subcategories 
 								$q = "SELECT * FROM `categories` WHERE c_parent = ". $row['c_id'];
 								$res = $mysqli->query($q);
+								//if there are subcategories see items should redirect to the sub_category page
 								if($res->num_rows > 0)
 								{
-									
 									echo "<a href='sub_category.php?category=$row[c_name]&id=".$row[c_id]."' class='btn btn-primary' role='button' style='margin:2px;'>See items</a>";
 								
-								
 								}
-					
+								//if there are no subcategories every inventory should be listed
 								else
 								{
-						
 									echo "<a href='show_inventory.php?inventory=$row[c_name]&id=".$row[c_id]."' class='btn btn-primary' role='button' style='margin:2px;'> See items </a>";?>
 								
 								<?php
