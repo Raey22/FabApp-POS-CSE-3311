@@ -67,9 +67,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 								<th class='col-md-4'>Material Name</th>
                 <th class='col-md-2'>Product Number</th>
                 <th class='col-md-1'>Price</th>
-				<th class='col-md-1'>Weight</th>
-				<th class='col-md-1'>Height</th>
-				<th class='col-md-1'>Width</th>
                 <th class='col-md-1'>Quantity</th>
 							</tr>
 						</thead>
@@ -92,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 			//Change this query to be dynamic
 			//TODO: input sanitation
 			
-			$query = "SELECT * FROM categories AS C INNER JOIN materials AS M ON C.c_id = M.c_id INNER JOIN all_good_inventory AS I ON I.m_id = M.m_id WHERE M.c_id = {$_GET['id']}";
+			$query = "SELECT * FROM categories AS C INNER JOIN materials AS M ON C.c_id = M.c_id WHERE M.c_id = {$_GET['id']}";
 			if($result = $mysqli->query($query
 			
             ))
@@ -107,9 +104,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 									<td><?php echo $row['m_name']; ?></td>
 									<td><?php echo $row['product_number']; ?></td>
                   					<td><?php echo $row['price']; ?></td>
-									<td><?php echo $row['width']; ?></td>
-									<td><?php echo $row['height']; ?></td>
-									<td><?php echo $row['weight']; ?></td>
 									<td><?php echo $row['quantity']; ?></td>
 								</tr>
 							<?php }
