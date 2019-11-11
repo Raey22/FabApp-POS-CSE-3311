@@ -217,11 +217,11 @@ function successful_and_failed_device_group_additions($m_id, $device_group) {
 
 ?>
 
-<title><?php echo $sv['site_name'];?> Edit Inventory</title>
+<title><?php echo $sv['site_name'];?> Manage Inventory</title>
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">Edit Inventory</h1>
+			<h1 class="page-header">Manage Inventory</h1>
 		</div>
 	</div>
 
@@ -312,7 +312,7 @@ function successful_and_failed_device_group_additions($m_id, $device_group) {
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<button class='btn btn-default' style='right: 10px;' type='button' data-toggle='collapse' data-target='.inventory_collapse'
-				  onclick='button_text(this)' aria-expanded='false' aria-controls='collapse'>Create New Inventory Item</button>
+				  onclick='button_text(this)' aria-expanded='false' aria-controls='collapse'>Create New Parent Inventory Item</button>
 			</div>
 			<div class='collapse inventory_collapse'>
 				<div class='panel-body'>
@@ -430,238 +430,29 @@ function successful_and_failed_device_group_additions($m_id, $device_group) {
 		</div>
 	<?php } ?>
 
-	<!-- Manage Sheet Good inventory -->	
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<button class='btn btn-default' style='right: 10px;' type='button' data-toggle='collapse' data-target='.sheet_inventory_collapse'
-			  onclick='button_text2(this)' aria-expanded='false' aria-controls='collapse'>Manage Sheet Good Inventory</button>
-		</div>
-		<div class='collapse sheet_inventory_collapse'>
-			<div class='panel-body'>
-				<div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<i class="fas fa-plus fa-fw" aria-hidden="true"></i> Add New Sheet Good Inventory
-					</div>
-					<div class="panel-body">
-						<table class="table table-bordered table-striped table-hover">
-							<form method="POST" action="" autocomplete='off'>
-								<tr>
-									<td>
-										<b data-toggle="tooltip" data-placement="top" title="Select Variant">Sheet Material </b>
-									</td>
-									<td>
-										<div class="col-md-6">
-										<select class="form-control" name="m_id" id="m_id" onchange="change_m_id()" tabindex="1">
-											<option disabled hidden selected value="">Sheet Parent</option>
-											<?php
-												$result = $mysqli->query("
-													SELECT DISTINCT `materials`.`m_id`, `materials`.`m_name`
-													FROM `materials`
-													WHERE `materials`.`m_parent` = '$sv[sheet_goods_parent]';");
-												while($row = $result->fetch_assoc()){
-													echo "<option value=\"$row[m_id]\">$row[m_name]</option>";
-												}
-											?>
-										</select>
-										</div>
+	<!-- Manage Sheet Good inventory -->
 
-
-										<div class="col-md-6">
-										<select class="form-control" name="variants" id="variants" tabindex="1">
-											<option value =""> Select Parent First</option>
-										</select>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<b data-toggle="tooltip" data-placement="top">Sheet Size (Inches) </b>
-									</td>
-									<td>
-										<div class="col-md-12">
-											<div class="col-md-2">
-												<i>Width </i>
-											</div>
-											<div class="col-md-10">
-												<div class="input-group">
-													<input type="number" class="form-control"name="sheet_width" id="sheet_width" max="500" min="1" value="0" step="0.1" placeholder="Enter Width" />
-													<span class="input-group-addon unit">inch(es)</span>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="col-md-2">
-												<i>Height </i>
-											</div>
-											<div class="col-md-10">
-												<div class="input-group">
-													<input type="number" class="form-control"name="sheet_height" id="sheet_height" max="500" min="1" value="0" step="0.1" placeholder="Enter Height" />
-													<span class="input-group-addon unit">inch(es)</span>
-												</div>
-											</div>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<b data-toggle="tooltip" data-placement="top">Quantity </b>
-									</td>
-									<td>
-										<input type="number" class="form-control"name="sheet_quantity" id="sheet_quantity" max="250" min="1" value="1" step="1" placeholder="Enter Quantity" />
-									</td>
-								</tr>
-
-								<tfoot>
-									<tr>
-										<td colspan="2">
-											<div class="pull-left">
-												<button type="submit" name="inventoryBtn" class="btn btn-success" onclick="return Submitter()">Add Sheet Inventory</button>
-											</div>
-										</td>
-									</tr>
-								</tfoot>
-							</form>
-						</table>
-					</div>
-					<!-- /.panel-body -->
-				</div>
-				<!-- /.panel -->
-			</div>
-
-				<div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<i class="fas fa-plus fa-fw" aria-hidden="true"></i> Add New Sheet Good Variant
-					</div>
-					<div class="panel-body">
-						<table class="table table-bordered table-striped table-hover">
-							<form method="POST" action="" autocomplete='off'>
-								<tr>
-									<td>
-										<b data-toggle="tooltip" data-placement="top" title="Select Parent">Sheet Parent </b>
-									</td>
-									<td>
-										<select class="form-control" name="m_id1" id="m_id1">
-											<option disabled selected value="">Select Sheet</option>
-											<?php
-												$result = $mysqli->query("
-													SELECT DISTINCT `materials`.`m_id`, `materials`.`m_name`
-													FROM `materials`
-													WHERE `materials`.`m_parent` = '$sv[sheet_goods_parent]';");
-												while($row = $result->fetch_assoc()){
-													echo "<option value=\"$row[m_id]\">$row[m_name]</option>";
-												}
-											?>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<b data-toggle="tooltip" data-placement="top" title="Enter the name of the sheet material">Sheet Good Name </b>
-									</td>
-									<td>
-										<input type="text" class="form-control"name="sheet_name1" id="sheet_name1" maxlength="50" size="50" placeholder="Enter Name" />
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<b data-toggle="tooltip" data-placement="top" title="Choose or input the color of the material">Color Hex </b>
-										<br>Include Color <input type="checkbox" id="colorBox" />
-									</td>
-									<td>
-										<div style="text-align:center;">
-											<input disabled type="color" name="sheet_color" id="sheet_color" value="" style="width: 300px;">
-										</div>
-									</td>
-								</tr>
-								<tfoot>
-									<tr>
-										<td colspan="2">
-											<div class="pull-left">
-												<button type="submit" name="variantBtn1" class="btn btn-success" onclick="return Submitter()">Add Sheet Variant</button>
-											</div>
-										</td>
-									</tr>
-								</tfoot>
-							</form>
-						</table>
-					</div>
-					<!-- /.panel-body -->
-					<div class="panel-heading">
-						<div class="panel panel-default">
-							<div style="text-align:center;">
-							<input class='btn btn-info' type='button' data-toggle='collapse' data-target='.variant_field' onclick='button_text1(this)' aria-expanded='false' style='width:100%;' aria-controls='collapse' id="Add Sheet Good Material" value='Add Sheet Good Material'/>
-							</div>
-						</div>
-					</div>
-					<div class="panel-body">
-						<div class='col-md-12 variant_field collapse'>
-							<table class="table table-bordered table-striped table-hover">
-								<form method="POST" action="" autocomplete='off'>
-									<tr>
-										<td>
-											<b data-toggle="tooltip" data-placement="top" title="email contact information">Sheet Good Material Name </b>
-										</td>
-										<td>
-											<input type="text" class="form-control"name="sheet_name" id="sheet_name" maxlength="50" size="50" placeholder="Enter Name" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<b data-toggle="tooltip" data-placement="top">Sheet Cost (per in<sup>2</sup>) </b>
-										</td>
-										<td>
-											<div class="input-group">
-												<span class="input-group-addon unit">$</span>
-												<input type="number" name="sheet_cost" id="sheet_cost" min="0" step='0.01' class="form-control" max="99.99" min="0.00" value="0.00" step="0.01" tabindex="1"/>
-											</div>
-										</td>
-									</tr>
-									<tfoot>
-										<tr>
-											<td colspan="2">
-												<div class="pull-left">
-													<button type="submit" name="variantBtn" class="btn btn-success" onclick="return Submitter()">Add Sheet Material</button>
-												</div>
-											</td>
-										</tr>
-									</tfoot>
-								</form>
-							</table>
-						</div>
-					</div>
-				</div>
-				<!-- /.panel -->
-			</div>
-			</div>
-		</div>
-	</div>
 
 	</div>
 <!-- Update inventory -->
 <!-- Display changes of inventory based on item selected; maybe new page? -->
-		<div class="row">
+		<!-- <div class="row">
 			<div class="row">
 				&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
-			<!-- /.row -->
 
 			<div class="row">
 				&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
-			<!-- /.row -->
 
 			<div class="row">
 				&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
-			<!-- /.row -->
 
 			<div class="row">
 				&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
-			<!-- /.row -->
-		</div>
+		</div> -->
 </div>
 
 <!-- MODAL -->

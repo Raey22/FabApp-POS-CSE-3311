@@ -5,7 +5,9 @@
 
  *  Editted by Khari Thomas
  *  Note:
- *	 Uncomment or remove Sheet Goods tab
+ *	 Uncomment or remove Sheet Goods tab and associate files & database table
+ *	 Uncomment or remove Usable Inventory tab (and associate files & database table)*
+ *     ^ files may not need to be removed since code is being reused
  -->
 <html lang="en">
 <head>
@@ -211,37 +213,36 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 				<div class="sidebar-nav navbar-collapse">
 					<ul class="nav" id="side-menu">
 						<li>
-							<a href="/index.php"><i class="fas fa-ticket-alt"></i> FabApp</a>
+							<a href="/index.php"><i class="fas fa-ticket-alt"></i> Dashboard</a>
 						</li>
 						<?php if (isset($staff) && $staff->getRoleID() >=  $sv['LvlOfStaff']) { ?>
+							<li>
+								<a href="/pages/all_goods.php"><i class="fas fa-square"></i> Register</a>
+							</li>
+							<li>
+								<a href="/test/index.php"><i class="fas fa-square"></i> Test Dashboard</a>
+							</li>
 							<li>
 								<a href="/admin/error.php"><i class="fas fa-bolt"></i> Error</a>
 							</li>
 						<?php }
-						if(isset($staff) && $staff->getRoleID() >= $sv['LvlOfLead']) { ?>
+						if(isset($staff) && $staff->getRoleID() >= $sv['LvlOfStaff']) { ?>
 							<li>
 								<a href="#"><i class="fas fa-warehouse"></i> Inventory<span class="fas fa-angle-left"></span></a>
 								<ul class="nav nav-second-level">
 									<li>
-										<a href="/pages/inventory.php"><i class="fas fa-box"></i> On Hand</a>
+										<a href="/pages/inventory.php"><i class="fas fa-box"></i> Current Inventory</a>
 									</li>
 									<li>
-										<a href="/pages/inventory_processing.php"><i class="fas fa-shipping-fast"></i> Edit Inventory</a>
+										<a href="/pages/inventory_processing.php"><i class="fas fa-plus"></i> Add Inventory</a>
 									</li>
-									<?php if(isset($staff) && $staff->getRoleID() >= $sv['minRoleTrainer']) { ?>
+									<!-- <?php if(isset($staff) && $staff->getRoleID() >= $sv['minRoleTrainer']) { ?>
 									<li>
 										<a href="/pages/current_inventory.php"><i class="far fa-check-square"></i> Usable Inventory</a>
-									</li>
+									</li> -->
 									<!-- Uncomment me or delete me if no longer needed -->
 									<!-- <li>
 										<a href="/pages/sheet_goods.php"><i class="fas fa-square"></i> Sheet Goods</a>
-									</li> -->
-									<li>
-										<a href="/pages/all_goods.php"><i class="fas fa-square"></i> All Goods</a>
-									</li>
-									<!-- Uncomment to put shopping cart here -->
-									<!-- <li>
-										<a href="/pages/cart.php"><i class="fas fa-square"></i> Shopping Cart</a>
 									</li> -->
 									<?php } ?>
 								</ul>

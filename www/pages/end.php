@@ -2,10 +2,10 @@
 
 
 /***********************************************************************************************************
-*	
+*
 *	@author Jon Le
-*	Overhauled by: MPZinke on 07.21.19 to add Multiple Material (MultiMaterial Project) 
-*	 editing functionalities. Improved commenting an logic/functionality of page; update in 
+*	Overhauled by: MPZinke on 07.21.19 to add Multiple Material (MultiMaterial Project)
+*	 editing functionalities. Improved commenting an logic/functionality of page; update in
 *	 accordance with future class changes.
 *	CC BY-NC-AS UTA FabLab 2016-2019
 *	FabApp V 0.94
@@ -15,7 +15,7 @@
 *		-Sheet Goods
 *		-Storage Box
 *
-*	DESCRIPTION: Complete active tickets without charge.  Prepare active tickets for 
+*	DESCRIPTION: Complete active tickets without charge.  Prepare active tickets for
 *	 payment by marking material usage, and ticket status.  This is the last step for total failed
 *	 tickets.  Displays additional transaction information
 *	FUTURE:	-Add ability to add additional materials
@@ -45,7 +45,7 @@ if($staff->roleID < $role['staff'] || ($staff->operator == $ticket->user->operat
 	exit_if_error("You do not have permission to end this ticket.  Please ask a staff member", "/pages/lookup.php?trans_id=$trans_id");
 
 // prevent ending ended tickets except those that are prepaid—this way the materials used are confirmed
-if($ticket->status->status_id > $status['moveable'] && !$ticket->device_group->is_pay_first) 
+if($ticket->status->status_id > $status['moveable'] && !$ticket->device_group->is_pay_first)
 	exit_if_error("Transaction #$trans_id already ended");
 
 // no cost associated with ticket && not assign materials after ticket; auto close
@@ -55,7 +55,7 @@ if($ticket->no_associated_materials_have_a_price() && $ticket->device_group->is_
 	header("Location:/pages/lookup.php?trans_id=$ticket->trans_id");
 }
 // cost associated with ticket; not staff
-elseif($staff->getRoleID() < $role['staff']) 
+elseif($staff->getRoleID() < $role['staff'])
 	exit_if_error("This ticket may have a cost. Please ask a staff member to help you close this ticket.");
 
 // cost associated; get attributes from user
@@ -117,7 +117,7 @@ function group_materials_by_parent_and_create_inputs($mats_used) {
 	// group materials by parent
 	$m_parents = $group_quantity_used = $parentless = array();
 	foreach($mats_used as $mu) {
-		// combine with previously added 
+		// combine with previously added
 		if(array_key_exists($mu->material->m_parent->m_name, $m_parents)) {
 			$m_parents[$mu->material->m_parent->m_name][] = $mu;
 			$group_quantity_used[$mu->material->m_parent->m_name] += $mu->quantity_used;
@@ -188,7 +188,7 @@ function create_material_html_block($group) {
 		// —— SELECT ——
 		// if(!$mu->quantity_used) $default_selection = "selected";  // if not mats used, change selected to Not Used
 		$measurability = $mu->material->is_measurable ? "measurable" : "immeasurable";
-		$select = 	"<select id='$mu->mu_id-select' class='form-control mat_used_select $measurability' 
+		$select = 	"<select id='$mu->mu_id-select' class='form-control mat_used_select $measurability'
 					onchange='adjust_ticket_status(this); adjust_input_for_status(this);'>
 						<option selected hidden>SELECT</option>
 						<option value='$status[used]'>Used</option>
@@ -197,7 +197,7 @@ function create_material_html_block($group) {
 					</select>";
 
 		// —— MAT QUANTITY INPUT ——
-		if($mu->material->is_measurable) 
+		if($mu->material->is_measurable)
 			$quantity_input =	"<tr>
 									<td>
 										".material_quantity_input($mu)."
@@ -242,24 +242,24 @@ function material_quantity_input($mat_used) {
 		$minute = ($mat_used->quantity_used - $hour) * 60;
 		return	"<div class='input-group'>
 					<span class='input-group-addon'><i class='$sv[currency]'></i> ".sprintf("%0.2f", $mat_used->material->price)." x </span>
-					<input type='number' id='$mat_used->mu_id-input' class='form-control mat_used_input time $parent_code-child' 
-					onkeyup='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();' 
-					onchange='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();' 
+					<input type='number' id='$mat_used->mu_id-input' class='form-control mat_used_input time $parent_code-child'
+					onkeyup='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();'
+					onchange='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();'
 					autocomplete='off' style='text-align:right;' min='$min_hours' step='1' value='$hour'>
 					<span class='input-group-addon'>Hours</span>
 
-					<input type='number' id='$mat_used->mu_id-minute' class='form-control time' 
-					onkeyup='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();' 
-					onchange='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();' 
+					<input type='number' id='$mat_used->mu_id-minute' class='form-control time'
+					onkeyup='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();'
+					onchange='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();'
 					autocomplete='off' style='text-align:right;' min='0' max='59' value='$minute'>
 					<span class='input-group-addon'>Minutes</span>
 				</div>";
 	}
 	return 	"<div class='input-group'>
 				<span class='input-group-addon'><i class='$sv[currency]'></i> ".sprintf("%0.2f", $mat_used->material->price)." x </span>
-				<input type='number' id='$mat_used->mu_id-input' class='form-control mat_used_input $parent_code-child' 
-				onkeyup='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();' 
-				onchange='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();' 
+				<input type='number' id='$mat_used->mu_id-input' class='form-control mat_used_input $parent_code-child'
+				onkeyup='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();'
+				onchange='adjust_parent_input(this); adjust_status_for_input(this); adjust_balances();'
 				autocomplete='off' value='".sprintf("%0.2f", $mat_used->quantity_used)."' style='text-align:right;' min='0'/>
 				<span class='input-group-addon'>".$mat_used->material->unit."</span>
 			</div>";
@@ -270,7 +270,7 @@ function material_quantity_input($mat_used) {
 // —————————————————— UTILITY  ——————————————————
 
 
-// dynamically get the materials (mu_id, status, quantity) from page 
+// dynamically get the materials (mu_id, status, quantity) from page
 function get_material_statuses_from_page($mats_used) {
 	$materials = array();
 	foreach($mats_used as $mat_used) {
@@ -338,10 +338,10 @@ function exit_if_error($error, $redirect=null) {
 						</tr>
 						<?php if($ticket->est_time) { ?>
 							<tr>
-								<td>Estimated Time</td>	
+								<td>Estimated Time</td>
 								<td><?php echo $ticket->est_time; ?></td>
 							</tr>
-						<?php 
+						<?php
 						}
 						if($ticket->duration) { ?>
 							<tr>
@@ -365,7 +365,7 @@ function exit_if_error($error, $redirect=null) {
 												<?php if($ticket->device->device_group->is_storable) { ?>
 													<option value='<?php echo $status['stored']; ?>'>Storage</option>
 													<option value='<?php echo $status['complete']; ?>'>Pick Up</option>
-												<?php } 
+												<?php }
 												else {?>
 													<option value='<?php echo $status['complete']; ?>'>Complete</option>
 												<?php } ?>
@@ -410,7 +410,7 @@ function exit_if_error($error, $redirect=null) {
 											<select id='new_material' name='new_material' class='form-control'>
 												<?php
 												// allows for materials to added twice
-												foreach($ticket->device->device_group->optional_materials as $optional_material)
+												foreach(array_merge($ticket->device->device_group->optional_materials, $ticket->device->device_group->required_materials) as $optional_material)
 													echo "<option value='$optional_material->m_id'>$optional_material->m_name</option>";
 												?>
 											</select>
@@ -508,10 +508,10 @@ function exit_if_error($error, $redirect=null) {
 					<span class='input-group-addon'>Object Type</span>
 					<select class='form-control' onchange='get_box_for_type(this);'>
 						<option selected disabled hidden>—</option>
-						<?php 
+						<?php
 						$types = StorageUnit::types();
 						if($types)
-							foreach($types as $option) 
+							foreach($types as $option)
 								echo "<option value='$option'>$option</option>";
 						else echo "<option>ERROR: Could not get drawer types from DB</option>";
 						?>
@@ -528,31 +528,31 @@ function exit_if_error($error, $redirect=null) {
 	</div>
 </div>
 
-<?php 
+<?php
 include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 ?>
 
 <script>
 
 	// bring status numbers (dynamically) to front end
-	var global_status = {<?php echo "'total_fail' : $status[total_fail], 'partial_fail' : $status[partial_fail], 
-										'cancelled' : $status[cancelled], 'complete' : $status[complete], 
-										'stored' : $status[stored], 'failed_mat' : $status[failed_mat], 
+	var global_status = {<?php echo "'total_fail' : $status[total_fail], 'partial_fail' : $status[partial_fail],
+										'cancelled' : $status[cancelled], 'complete' : $status[complete],
+										'stored' : $status[stored], 'failed_mat' : $status[failed_mat],
 										'used' : $status[used], 'unused' : $status[unused]"; ?>};
 
 
 	// ————————————— INPUT-STATUS CONTROL —————————————–
 	// ———————————————————————————————————————
-	/* This is a large chunk of the JS.  Its gloal is to control the values of inputs based on 
+	/* This is a large chunk of the JS.  Its gloal is to control the values of inputs based on
 	statuses and statuses based on inputs.
 	CONTROLS:
 		TICKET:
-		-A ticket status of cancelled with default to all materials being used.  This way they 
-		 must justify why/how a material is not used.  Gives inventory/FabLab benefit of the 
+		-A ticket status of cancelled with default to all materials being used.  This way they
+		 must justify why/how a material is not used.  Gives inventory/FabLab benefit of the
 		 doubt.
 		-A ticket status of cancelled may not have any failed_mat statuses, because a failed &
 		 sellable ticket means it should be marked as partial_fail.
-		-If no materials are used, then default to total fail, because we assume that a ticket 
+		-If no materials are used, then default to total fail, because we assume that a ticket
 		 failed before it even started is more likely than individual starting & cancelling before
 		 any cost accrued.
 		MATERIALS:
@@ -560,22 +560,22 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 		 it is materials that are being marked, page assumes that the user is completing materials
 		 individually and is unsure of ticket status.  Otherwise, they would either mark it initially
 		 as complete, or have an unused/failed material.
-		-If a mat_used has a status of unused, the quantity is set to 0. If the quantity is 
+		-If a mat_used has a status of unused, the quantity is set to 0. If the quantity is
 		 changed then the status must be reselected, because it is no longer unused.
 		-When a material status is set to unused, the input value is stored in a dictionary, in
 		 case the user decides to revert the status or misclicked.
 	*/
 
-	/* 
+	/*
 	object to store data for quantity inputs and calculate/set quantities with methods.
-	Object was chosen because it allows for its quantity to be available and set regardless of 
-	whether the input is a time.  It takes the parameter of a input element, finds it (and its 
+	Object was chosen because it allows for its quantity to be available and set regardless of
+	whether the input is a time.  It takes the parameter of a input element, finds it (and its
 	associated elements ie time, parent, status).
 	*/
 	class Input {
 		constructor(input) {
 			this.mu_id = input.id.substr(0, input.id.indexOf('-'));
-			this.element; 
+			this.element;
 			this.is_time_based;
 			this.initialize_element_and_type(input);
 			this.parent = this.parent_from_classes(input);
@@ -586,9 +586,9 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 
 		// if input is time based assign appropriate elements for it
 		initialize_element_and_type(input) {
-			if(input.classList.contains("time")) 
-				this.element = {	"hour" : document.getElementById(this.mu_id+"-input"), 
-									"min" : document.getElementById(this.mu_id+"-minute")}, 
+			if(input.classList.contains("time"))
+				this.element = {	"hour" : document.getElementById(this.mu_id+"-input"),
+									"min" : document.getElementById(this.mu_id+"-minute")},
 				this.is_time_based = true;
 			else {
 				this.element = input
@@ -620,7 +620,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 		// retrieve the parent name of a class (<parent_name>-child); return null if no parent name
 		parent_from_classes(input) {
 			for(var x = 0; x < input.classList.length; x++)
-				if(input.classList[x].includes("-child")) 
+				if(input.classList[x].includes("-child"))
 					return document.getElementById(input.classList[x].substr(0, input.classList[x].indexOf('-child')));
 			return null;
 		}
@@ -692,7 +692,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 	}
 
 
-	// amount to be charged 
+	// amount to be charged
 	function calculate_remaining_balance(total=null) {
 		var credit = document.getElementById("credit");
 		if(!credit) return;  // no credit found; no need to try to caluclate remaining balance
@@ -710,10 +710,10 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 	// material status changed: adjust ticket status
 	function adjust_ticket_status(status_element) {
 		// all materials being used (!failed) means ticket was complete
-		if(all_material_status_are(global_status['used'])) 
+		if(all_material_status_are(global_status['used']))
 			document.getElementById("ticket_status").value = global_status['complete'];
 		// if no materials were used then nothing is usable and is a total fail
-		else if(all_material_status_are(global_status['unused'])) 
+		else if(all_material_status_are(global_status['unused']))
 			document.getElementById("ticket_status").value = global_status['total_fail'];
 	}
 
@@ -756,7 +756,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 		// recalulate amounts
 		var input_element = document.getElementById(input.mu_id+"-input");
 		adjust_parent_input(input_element);
-		adjust_balances();		
+		adjust_balances();
 	}
 
 
@@ -778,7 +778,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 	// check if all of the materials have the same status as status passed
 	function all_material_status_are(status) {
 		var materials_statuses = document.getElementsByClassName("mat_used_select");
-		for(var x = 0; x < materials_statuses.length; x++) 
+		for(var x = 0; x < materials_statuses.length; x++)
 			if(parseInt(materials_statuses[x].value) != status) return false;
 		return true;
 	}
@@ -791,7 +791,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 	}
 
 
-	// 
+	//
 	function set_status_for_all_materials_to_used_if_status_quantity_not_null() {
 		var materials_statuses = document.getElementsByClassName("mat_used_select");
 		for(var x = 0; x < materials_statuses.length; x++)
@@ -810,14 +810,14 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 		var m_id = document.getElementById("new_material").value;
 		if(isNaN(parseInt(m_id))) return;
 		if(!confirm("Are you sure you would like to add another material to this transaction?"));
-		
+
 		// add_new_material: request function from page (new material instance created, return HTML)
 		// edit_request: request coming from edit.php (add functions/staff row)
 		$.ajax({
 			url: "./sub/material_ajax_requests.php",
 			type: "POST",
 			dataType: "json",
-			data: {	"add_new_material" : true, 
+			data: {	"add_new_material" : true,
 					"m_id" : m_id,
 					"trans_id" : <?php echo $ticket->trans_id; ?>
 			},
@@ -898,9 +898,9 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 		else if(ticket_status.value == global_status["partial_fail"] && document.getElementById("ticket_notes") < 10) {
 			alert("You must state how the ticket failed")
 		}
-		document.getElementById("ticket_status_confirmation").innerHTML = 
+		document.getElementById("ticket_status_confirmation").innerHTML =
 			confirmation_cell_format('ticket_status', `<h5>${ticket_status_name}</h5>`, ticket_status.value);
-		
+
 		// ---- materials ----
 		var materials = get_and_sort_materials();
 		// mats_used listed but none accounted for: error in get_and_sort_materials()
@@ -908,7 +908,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 
 		// no material is marked as failed && not all are unused: a failed ticket requires a fail material or all to be null
 		if((ticket_status.value == global_status['partial_fail'] || ticket_status.value == global_status['total_fail'])
-		&& (!any(materials, function(part, value) {return part['status'].value == value;}, global_status['failed_mat']) 
+		&& (!any(materials, function(part, value) {return part['status'].value == value;}, global_status['failed_mat'])
 		  && any(materials, function(part, value) {return part['status'].value != value;}, global_status['unused']))) {
 			alert(	"Ticket is marked as failed, but no failed material is indicated.\n"+
 					"Please indicate which material was failed on usage.\n"+
@@ -971,7 +971,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 	}
 
 
-	// 
+	//
 	function dictionary_of_measurable_material(material) {
 		var cost = material.quantity() * material.price;
 		var name = material_name(material.status);
@@ -981,7 +981,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 			 alert("Please select a status for "+name);
 			 return null;
 		}
-		else if(material.status.value == global_status['used'] && !material.quantity()) { 
+		else if(material.status.value == global_status['used'] && !material.quantity()) {
 			alert("Material status cannot be used with a 0 quantity for "+name);
 			return null;
 		}
@@ -995,7 +995,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 	function populate_material_table(materials) {
 		$("#material_confirmation_table tr").remove();  // clear previous entries
 		var table = document.getElementById("material_confirmation_table");
-		
+
 		// create/add table headers
 		var header = table.insertRow(-1);
 		var header1 = header.insertCell(0);
@@ -1074,7 +1074,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 				}
 
 				// add stuff to page
-				var message =	`Please place the object into drawer ${response["drawer_label"]} box ${response["unit_label"]}, `+ 
+				var message =	`Please place the object into drawer ${response["drawer_label"]} box ${response["unit_label"]}, `+
 									`then confirm its placement by clicking the highlighted box on the screen`;
 				var drawer_label = 	`<h3>Drawer ${response["drawer_label"]} </h3>`;
 				document.getElementById("drawer_fill").innerHTML = message + drawer_label + response["drawer_HTML"];
