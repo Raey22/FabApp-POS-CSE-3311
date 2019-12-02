@@ -3,8 +3,10 @@
 *   CC BY-NC-AS UTA FabLab 2016-2018
 *   FabApp V 0.91
 *   Author: Khari Thomas
-
+*
 *   Check if query should include M.measurable = 'Y'
+*
+*   Price calculations updated based on units by Glenda Robertson 11-5-19
 */
 
 //This will import all of the CSS and HTML code necessary to build the basic page
@@ -43,11 +45,12 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
         <div class="panel panel-default">
           <div class="panel-heading">
             <i class="fas fa-warehouse"></i> All Goods Inventory
+            
           </div>
 
           <!-- Search Bar -->
           <div class="col-md-6">
-            <input type="text" class="form-control" id="searchBar" onkeyup="searchTable()" placeholder="Search for materials..">
+            <input type="text" class="form-control"  id="searchBar" onkeyup="searchTable()" placeholder="Search for materials..">
           </div>
           <br>
 
@@ -60,6 +63,7 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
                     <tr class="tablerow">
                       <th><i class="fas fa-square"></i> Sheet Material</th>
                       <th><i class="fas fa-ruler-combined"></i> Size (Inches)</th>
+                      <th><i class="fas fa-weight"></i> Weight (grams)</th>
                       <th><i class="fas fa-money-bill-wave-alt"></i> Cost</th>
                       <th><i class="fas fa-boxes"></i> Quantity</th>
                     </tr>
@@ -78,17 +82,39 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
                         <td align="center"><?php echo($row['m_name']); ?><div class="color-box" style="background-color: #<?php echo($row['color_hex']);?>;"/>
                         </td>
 
-                        <!-- Size -->
-                        <td align="center"><?php echo($row['width']." x ".$row['height']) ?></td>
+              
 
                         <!-- Cost -->
-                        <td align="center"><?php echo("$".number_format((float)(($row['width']*$row['height']) * $row['price']), 2, '.', '')) ?></td>
+                        <?php if($row['unit'] == "gram(s)") { ?>
+                        <!-- Size -->
+                        <td align="center"><?php echo(" - ") ?></td>
+
+                        <!-- Weight -->
+                        <td align="center"><?php echo($row['weight']) ?></td>
+                          <td align="center"><?php echo("$".number_format((float)(($row['weight']) * $row['price']), 2, '.', '')) ?></td>
+                        <?php }
+
+                         else if($row['unit'] == "sq_inch(es)") { ?>
+                          <!-- Size -->
+                          <td align="center"><?php echo($row['width']." x ".$row['height']) ?></td>
+
+                              <!-- Weight -->
+                              <td align="center"><?php echo(" - ")  ?></td>
+                          <td align="center"><?php echo("$".number_format((float)(($row['width']*$row['height']) * $row['price']), 2, '.', '')) ?></td>
+                        <?php } else { ?>
+                        <!-- Size -->
+                        <td align="center"><?php echo($row['width']." x ".$row['height']) ?></td>
+                        <!-- Weight -->
+                        <td align="center"><?php echo($row['weight']) ?></td>
+
+                          <td align="center"><?php echo("$".number_format((float)($row['price']), 2, '.', '')) ?></td>
+                        <?php } ?>
 
                         <!-- Quanity -->
                         <td align="center"><?php echo($row['quantity']); ?>
                           <!-- Add to Cart -->
                           <div class="pull-right">
-                            <span class="pull-right"><a href="sub/add_cart.php?id=<?php echo ("".$row['inv_id']."&h=".$row['height']."&w=".$row['width']."&p=".$row['price']); ?>" class="btn btn-success btn-sm"><i class="fas fa-cart-plus"></i></a></span>
+                            <span class="pull-right"><a href="sub/add_cart.php?id=<?php echo ("".$row['inv_id']."&h=".$row['height']."&w=".$row['width']."&p=".$row['price']."&m=".$row['weight']."&u=".$row['unit']); ?>" class="btn btn-success btn-sm"><i class="fas fa-cart-plus"></i></a></span>
                           </div>
                         </td>
 
@@ -168,7 +194,7 @@ function searchTable() {
 
   // Loop through all table rows, and hide those who don't match the search query
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
+    td = tr[i].getElementsByTagName("td")[0];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {

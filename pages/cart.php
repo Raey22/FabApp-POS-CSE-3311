@@ -3,7 +3,8 @@
 *   CC BY-NC-AS UTA FabLab 2016-2018
 *   FabApp V 0.91
 *   Author: Khari Thomas
-
+*
+*   Price calculations updated based on units by Glenda Robertson 11-5-19
 */
 //This will import all of the CSS and HTML code necessary to build the basic page
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
@@ -103,7 +104,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
     WHERE AI.inv_id=$temp_inv AND AI.quantity != 0;
     ")) {
       while ($row = $result->fetch_assoc()) {
-        $_SESSION['co_price'] = number_format((float)(((($row["width"]*$row["height"]) * $row["price"])* $_SESSION['co_quantity'][$v])+$_SESSION['co_price']), 2, '.', '');
+//calculate price based on units
+        if($row['unit'] == "gram(s)")
+        {
+          $_SESSION['co_price'] = number_format((float)((($row['weight'] * $row['price'])* $_SESSION['co_quantity'][$v])+$_SESSION['co_price']), 2, '.', '');
+        }
+        else if($row['unit'] == "sq_inch(es)")
+        {
+          $_SESSION['co_price'] = number_format((float)(((($row['width']*$row['height']) * $row['price'])* $_SESSION['co_quantity'][$v])+$_SESSION['co_price']), 2, '.', '');
+        }
+        else
+        {
+          $_SESSION['co_price'] = number_format((float)(($row['price']* $_SESSION['co_quantity'][$v])+$_SESSION['co_price']), 2, '.', '');
+        }
+
       }
     }
   }
@@ -177,11 +191,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
                                   <?php echo ($row['width']." x ".$row['height']); ?>
                                 </td>
                                 <td>
-                                  <input type=number name="cart_quantity<?php echo ($ii); ?>" id="cart_quantity<?php echo ($ii); ?>" max="<?php echo($row['quantity']); ?>" min="1" class="example" value="<?php echo ($_SESSION['co_quantity'][$ii]); ?>" step="1" placeholder="Enter Quantity" style="width:75%;"/>
+                                  <input type=number name="cart_quantity<?php echo ($ii); ?>" id="cart_quantity<?php echo ($ii); ?>" max="<?php echo($row['quantity']); ?>" min="1" class="example"  value="<?php echo ($_SESSION['co_quantity'][$ii]); ?>" step="1" placeholder="Enter Quantity" style="width:75%;"/>
                                 </td>
                                 <td>
-                                  <?php echo ("$".number_format((float)((($row["width"]*$row["height"]) * $row["price"])* $_SESSION['co_quantity'][$ii]), 2, '.', '')); ?>
-                                  <div class="pull-right"><a href="sub/delete_cart.php?id=<?php echo ("".$_SESSION['cart_array'][$ii]."&h=".$row['height']."&w=".$row['width']."&p=".$row['price']); ?>" class="btn btn-warning btn-xs" style="background-color: #FF7171;"><i class="fas fa-trash-alt"></i></a></div>
+                                  <?php
+                                  if($row['unit'] == "gram(s)") {
+                                    echo("$".number_format((float)(($row['weight']) * $row['price']), 2, '.', ''));
+                                  }
+                                  else if($row['unit'] == "sq_inch(es)"){
+                                    echo("$".number_format((float)(($row['width']*$row['height']) * $row['price']), 2, '.', ''));
+                                  }
+                                  else{
+                                    echo("$".number_format((float)($row['price']), 2, '.', ''));
+                                  } ?>
+                                  <div class="pull-right"><a href="sub/delete_cart.php?id=<?php echo ("".$_SESSION['cart_array'][$ii]."&h=".$row['height']."&w=".$row['width']."&p=".$row['price']."&m=".$row['weight']."&u=".$row['unit']); ?>" class="btn btn-warning btn-xs" style="background-color: #FF7171;"><i class="fas fa-trash-alt"></i></a></div>
                                 </td>
                               <?php } } ?>
                             </tr>
@@ -189,7 +212,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
                           <tr>
                             <td></td><td></td><td><div class="pull-right"><b>Total:</b></div></td>
                             <td>
-                              <b><?php echo ("$".$_SESSION['co_price']); ?></b><div class="pull-right"><button id="myBtn" type="submit" style="display: none;" class="btn btn-success btn-xs" name="refreshBtn" style="background-color: #41BC11;"><i class="fas fa-sync-alt"></i></button></div>
+                              <b id="total-price"><?php echo ("$".$_SESSION['co_price']); ?></b>
+                              <div class="pull-right">
+                                <button id="myBtn" type="submit" style="display: none;" class="btn btn-success btn-xs" name="refreshBtn" style="background-color: #41BC11;"><i class="fas fa-sync-alt"></i></button>
+                              </div>
                             </td>
                           </tr>
                         <?php } else { ?>
@@ -200,7 +226,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
                   </div>
                   <!-- /.panel-body -->
                   <div class="panel-footer collapse in clearfix" id="cartPanel2" style="background-color: #B5E6E6;">
-                    <div class="pull-right"><button class="btn btn-success btn-sm" type="button" style="background-color: #41BC11;" onclick="return goToPay()" data-toggle="tooltip" data-placement="top">Checkout</button></div>
+                  <div class="pull-right"><button class="btn btn-success btn-sm" type="button" style="background-color: #41BC11;" onclick="return goToPay()" data-toggle="tooltip" data-placement="top">Checkout</button></div>
                     <div class="pull-left"><button type="submit" class="btn btn-warning btn-sm" name="endCartBtn" style="background-color: #FF7171;">Empty Cart</button></div>
                   </div>
                 </form>
@@ -228,6 +254,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
     include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
     ?>
     <script>
+    
 
     /* Auto cart update function */
     // Get your element references just once:
@@ -238,6 +265,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
     input.addEventListener("keyup", myFunction);
     input.addEventListener("input", myFunction);
 
+    
     function myFunction() {
       if(input.value > 0) {
         document.getElementById("myBtn").click();
@@ -261,7 +289,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
       }
       return false;
     }
-
+  
     function goToPay() {
       if (window.XMLHttpRequest) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -295,12 +323,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
             document.getElementById("material_modal").innerHTML = this.responseText;
           }
         };
+//CHANGE HERE TO edit_product.php
         xmlhttp.open("GET", "sub/edit_sheet.php?inv_id=" + inv_id + "&m_id=" + m_id + "&width=" + width + "&height=" + height, true);
         xmlhttp.send();
       }
 
       $('#material_modal').modal('show');
     }
+// //CHECK and make sure this will work as expected
+//     function insertTransaction($trans_id, $inv_id, $quantity){
+//       global $mysqli;
+
+//       if ($mysqli->query("
+//           INSERT INTO `sheet_good_transactions` (`trans_id`, `inv_id`, `quantity`, `remove_date`) VALUES ('$trans_id', '$inv_id', '$quantity', CURRENT_TIMESTAMP);");
+//       {
+//                   return true;
+//               } else {
+//                   return false;
+//               }
+//     }
 
     </script>
     </html>

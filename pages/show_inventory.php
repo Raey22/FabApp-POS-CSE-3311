@@ -47,7 +47,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fas fa-warehouse fa-fw"></i> Inventory
+					<a class="btn " href = "inventory.php"> <i class="fas fa-warehouse fa-fw"></i> Inventory </a>
+					<a class="btn "  href = <?php echo "'add_inventory.php?id=".$_GET['id']."'";?> style = "float: right;"> <i class="fas fa-plus"></i></i> Add Inventory  </a>
 				</div>
 				<div class="panel-body">
 					<table class="table table-condensed" id="invTable">
@@ -57,15 +58,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 								<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 									<th class='col-md-1'>Edit</th>
 								<? }?>
-<<<<<<< HEAD
 								<th class='col-md-4'>Material Name</th>
                 <th class='col-md-2'>Product Number</th>
+				<th class='col-md-1'>Height</th>
+				<th class='col-md-1'>Width</th>
+				<th class='col-md-1'>Weight</th>
                 <th class='col-md-1'>Price</th>
-=======
-								<th class='col-md-5'>Material Name</th>
-                <th class='col-md-3'>Product Number</th>
-                <th class='col-md-2'>Price</th>
->>>>>>> 34f8741f24baf4f1f94649c2057bee3aff10f8d2
                 <th class='col-md-1'>Quantity</th>
 							</tr>
 						</thead>
@@ -88,7 +86,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 			//Change this query to be dynamic
 			//TODO: input sanitation
 			
-			$query = "SELECT * FROM categories AS C INNER JOIN materials AS M ON C.c_id = M.c_id WHERE M.c_id = {$_GET['id']}";
+			$query = "SELECT *  FROM all_good_inventory as I INNER JOIN materials AS M ON I.m_id = M.m_id WHERE M.c_id = {$_GET['id']}";
 			if($result = $mysqli->query($query
             ))
             {
@@ -96,11 +94,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 								<tr>
 									<!-- Prevents edit access from unauthorized users -->
 									<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
-										<td><a href="edit_product.php?id=<?php echo ("".$row['inv_id']); ?>"  class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a></td>
+										<td><a href="edit_product.php?id=<?php echo ("".$row['m_id']); ?>"  class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a></td>
 									<? }?>
 									<td><?php echo $row['m_name']; ?></td>
 									<td><?php echo $row['product_number']; ?></td>
                   					<td><?php echo $row['price']; ?></td>
+									<td><?php echo $row['height']; ?></td>
+									<td><?php echo $row['width']; ?></td>
+									<td><?php echo $row['weight']; ?></td>
 									<td><?php echo $row['quantity']; ?></td>
 								</tr>
 							<?php }

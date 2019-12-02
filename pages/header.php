@@ -219,9 +219,7 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 							<li>
 								<a href="/pages/all_goods.php"><i class="fas fa-square"></i> Register</a>
 							</li>
-							<li>
-								<a href="/test/index.php"><i class="fas fa-square"></i> Test Dashboard</a>
-							</li>
+							
 							<li>
 								<a href="/admin/error.php"><i class="fas fa-bolt"></i> Error</a>
 							</li>
@@ -234,7 +232,7 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 										<a href="/pages/inventory.php"><i class="fas fa-box"></i> Current Inventory</a>
 									</li>
 									<li>
-										<a href="/pages/inventory_processing.php"><i class="fas fa-plus"></i> Add Inventory</a>
+										<a href="/pages/inventory_processing.php"><i class="fas fa-truck-loading"></i> Manage Inventory</a>
 									</li>
 									<!-- <?php if(isset($staff) && $staff->getRoleID() >= $sv['minRoleTrainer']) { ?>
 									<li>
@@ -367,6 +365,10 @@ elseif (isset($_SESSION['error_msg']) && $_SESSION['error_msg']!= ""){
 									</li>
 									<li>
 										<a href="/admin/onboarding.php"><i class="fas fa-clipboard"></i> OnBoarding</a>
+									</li>
+									<li>
+										<a href="/pages/alert.php"><i class="fas fa-exclamation-triangle"></i> Alert Settings</a>
+										
 									</li>
 									<li>
 										<a herf="#"><i class="fas fa-users"></i> Users<span class="fas fa-angle-left"></span></a>
