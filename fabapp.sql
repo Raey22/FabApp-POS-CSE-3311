@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 20, 2019 at 10:37 PM
+-- Generation Time: Dec 02, 2019 at 07:25 AM
 -- Server version: 5.6.37
 -- PHP Version: 5.6.31
 
@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS `all_good_inventory` (
 --
 
 INSERT INTO `all_good_inventory` (`inv_id`, `m_id`, `m_parent`, `width`, `height`, `weight`, `quantity`) VALUES
+(0, 2, NULL, '1.20', '1.10', '1.20', 2),
 (1, 2, 123, '1.00', '5.00', '6.00', 12),
 (2, 4, 123, '7.00', '5.00', '6.00', 12),
 (3, 6, NULL, '2.00', '5.00', '13.00', 12),
@@ -103,7 +104,7 @@ INSERT INTO `all_good_inventory` (`inv_id`, `m_id`, `m_parent`, `width`, `height
 (6, 9, 123, '5.00', '5.00', '11.00', 12),
 (7, 10, 123, '3.00', '4.00', '10.00', 12),
 (8, 13, 1, '7.00', '4.00', '12.00', 12),
-(9, 14, 1, '3.00', '4.00', '12.00', 12),
+(9, 14, 1, '3.00', '4.00', '12.00', 10),
 (10, 15, 1, '4.00', '1.00', '23.00', 12),
 (11, 16, 1, '5.00', '2.00', '24.00', 12),
 (12, 17, 1, '4.00', '4.00', '7.00', 12),
@@ -225,6 +226,20 @@ INSERT INTO `all_good_inventory` (`inv_id`, `m_id`, `m_parent`, `width`, `height
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `all_good_transactions`
+--
+
+CREATE TABLE IF NOT EXISTS `all_good_transactions` (
+  `ag_trans_ID` int(11) NOT NULL,
+  `trans_id` int(11) NOT NULL,
+  `inv_id` int(11) NOT NULL,
+  `quantity` int(10) NOT NULL,
+  `remove_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `authrecipients`
 --
 
@@ -282,34 +297,35 @@ INSERT INTO `carrier` (`c_id`, `provider`, `email`) VALUES
 CREATE TABLE IF NOT EXISTS `categories` (
   `c_id` int(11) NOT NULL,
   `c_name` varchar(255) NOT NULL,
-  `c_parent` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+  `c_parent` int(11) DEFAULT NULL,
+  `update_reason` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`c_id`, `c_name`, `c_parent`) VALUES
-(1, 'Sheet Good', NULL),
-(2, 'Filament', NULL),
-(3, 'Glass', NULL),
-(4, 'Vinyl', NULL),
-(5, 'Ink', NULL),
-(6, 'Fabrics', NULL),
-(7, 'Other', NULL),
-(8, 'Acrylic', 1),
-(9, 'Basswood', 1),
-(10, 'Wood', 1),
-(11, 'Plywood', 1),
-(12, 'Sheet Test', 1),
-(13, 'Glass Sheet', 3),
-(14, 'Glass Ground', 3),
-(15, 'Screen Ink', 5),
-(16, 'Airbrush', 5),
-(17, 'ABS', 2),
-(18, 'PLA', 2),
-(19, 'uPrint', 2),
-(20, 'NinjaFlex', 2);
+INSERT INTO `categories` (`c_id`, `c_name`, `c_parent`, `update_reason`) VALUES
+(1, 'Sheet Good', NULL, NULL),
+(2, 'Filament', NULL, NULL),
+(3, 'Glass', NULL, NULL),
+(4, 'Vinyl', NULL, NULL),
+(5, 'Ink', NULL, NULL),
+(6, 'Fabrics', NULL, NULL),
+(7, 'Other', NULL, NULL),
+(8, 'Acrylic', 1, NULL),
+(9, 'Basswood', 1, NULL),
+(10, 'Wood', 1, NULL),
+(11, 'Plywood', 1, NULL),
+(12, 'Sheet Test', 1, NULL),
+(13, 'Glass Sheet', 3, NULL),
+(14, 'Glass Ground', 3, NULL),
+(15, 'Screen Ink', 5, NULL),
+(16, 'Airbrush', 5, NULL),
+(17, 'ABS', 2, NULL),
+(18, 'PLA', 2, NULL),
+(19, 'uPrint', 2, NULL),
+(20, 'NinjaFlex', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -598,6 +614,26 @@ INSERT INTO `device_materials` (`dm_id`, `dg_id`, `m_id`, `required`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `email`
+--
+
+CREATE TABLE IF NOT EXISTS `email` (
+  `id_email` int(11) NOT NULL,
+  `email_address` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `email`
+--
+
+INSERT INTO `email` (`id_email`, `email_address`) VALUES
+(1, 'bkonffo@gmail.com'),
+(2, 'boris.konffo@mavs.uta.edu'),
+(3, 'hhh@gmai.com');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `error`
 --
 
@@ -625,151 +661,152 @@ CREATE TABLE IF NOT EXISTS `materials` (
   `color_hex` varchar(6) DEFAULT NULL,
   `measurable` enum('Y','N') NOT NULL DEFAULT 'N',
   `current` enum('Y','N') NOT NULL DEFAULT 'Y',
-  `c_id` int(11) DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8;
+  `c_id` int(11) DEFAULT '1',
+  `update_reason` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=149 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `materials`
 --
 
-INSERT INTO `materials` (`m_id`, `m_name`, `m_parent`, `price`, `product_number`, `unit`, `color_hex`, `measurable`, `current`, `c_id`) VALUES
-(1, 'ABS (Generic)', NULL, '0.0000', NULL, 'gram(s)', NULL, 'N', 'Y', 17),
-(2, 'Acrylic', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 8),
-(3, 'Cotton', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 6),
-(4, 'Glass (Generic)', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 13),
-(5, 'Leather', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 6),
-(6, 'FabLab PLA', NULL, '0.0500', NULL, 'gram(s)', NULL, 'Y', 'Y', 18),
-(7, 'Vinyl (Generic)', NULL, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(8, 'Wood', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 10),
-(9, 'Basswood', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 9),
-(10, 'Plywood', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 11),
-(11, 'MDF', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 7),
-(12, 'Other', NULL, NULL, NULL, '', NULL, 'N', 'Y', 7),
-(13, 'ABS Black', 1, '0.0500', '3D ABS-1KG1.75-BLK', 'gram(s)', '000000', 'Y', 'Y', 17),
-(14, 'ABS Blue', 1, '0.0500', NULL, 'gram(s)', '0047BB', 'Y', 'Y', 17),
-(15, 'ABS Green', 1, '0.0500', NULL, 'gram(s)', '00BF6F', 'Y', 'Y', 17),
-(16, 'ABS Orange', 1, '0.0500', NULL, 'gram(s)', 'fe5000', 'Y', 'Y', 17),
-(17, 'ABS Red', 1, '0.0500', NULL, 'gram(s)', 'D22630', 'Y', 'Y', 17),
-(18, 'ABS Purple', 1, '0.0500', NULL, 'gram(s)', '440099', 'Y', 'Y', 17),
-(19, 'ABS Yellow', 1, '0.0500', NULL, 'gram(s)', 'FFE900', 'Y', 'Y', 17),
-(20, 'Vinyl Black', 7, '0.2500', NULL, 'inch(es)', '000000', 'Y', 'Y', 4),
-(21, 'Vinyl Sapphire Gloss', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(22, 'Vinyl Green', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(23, 'Vinyl Orange', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(24, 'Vinyl Cherry Red Matte', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(25, 'Vinyl Plum', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(26, 'Vinyl Yellow', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(27, 'uPrint Material', NULL, '8.1900', NULL, 'inch<sup>3</sup>', 'fdffe2', 'Y', 'Y', 19),
-(28, 'BYO Hatchbox', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(29, 'ABS White', 1, '0.0500', NULL, 'gram(s)', 'ffffff', 'Y', 'Y', 17),
-(30, 'Vinyl White', 7, '0.2500', NULL, 'inch(es)', 'ffffff', 'Y', 'Y', 4),
-(31, 'Transfer Tape', NULL, '0.1000', NULL, 'inch(es)', NULL, 'Y', 'Y', 7),
-(32, 'uPrint Support', NULL, '8.1900', NULL, 'inch<sup>3</sup>', NULL, 'Y', 'Y', 19),
-(33, 'ABS Bronze', 1, '0.0500', NULL, 'gram(s)', 'A09200', 'Y', 'Y', 17),
-(35, 'ABS Pink', 1, '0.0500', NULL, 'gram(s)', 'FF3EB5', 'Y', 'Y', 17),
-(36, 'ABS Mint', 1, '0.0500', NULL, 'gram(s)', '88DBDF', 'Y', 'Y', 17),
-(37, 'ABS Glow in the dark', 1, '0.0500', NULL, 'gram(s)', 'D0DEBB', 'Y', 'Y', 17),
-(38, 'ABS Trans Orange', 1, '0.0500', NULL, 'gram(s)', 'FCC89B', 'Y', 'Y', 17),
-(39, 'ABS Trans Red', 1, '0.0500', NULL, 'gram(s)', 'DF4661', 'Y', 'Y', 17),
-(40, 'ABS Trans White', 1, '0.0500', NULL, 'gram(s)', 'D9D9D6', 'Y', 'Y', 17),
-(41, 'ABS Trans Green', 1, '0.0500', NULL, 'gram(s)', 'A0DAB3', 'Y', 'Y', 17),
-(42, 'ABS Gold', 1, '0.0500', NULL, 'gram(s)', 'CFB500', 'Y', 'Y', 17),
-(43, 'Vinyl Ocean Blue', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(44, 'Vinyl Red Gloss', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(45, 'Vinyl Pink', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(46, 'Vinyl Teal Gloss', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(48, 'Vinyl Silver', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(49, 'uPrint Bed New', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 19),
-(50, 'uPrint Bed Partly_Used', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 19),
-(51, 'Delrin Sheet', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 7),
-(52, 'Thread', NULL, '1.0000', NULL, 'hour(s)', NULL, 'Y', 'Y', 6),
-(53, 'Paper-stock (chipboard)', NULL, NULL, NULL, '', NULL, 'N', 'Y', 7),
-(54, 'NinjaFlex (Generic)', NULL, '0.1500', NULL, 'gram(s)', NULL, 'N', 'Y', 20),
-(55, 'NinjaFlex Black', 54, '0.1500', NULL, 'gram(s)', '000000', 'Y', 'Y', 20),
-(56, 'NinjaFlex White', 54, '0.1500', NULL, 'gram(s)', 'ffffff', 'Y', 'Y', 20),
-(57, 'Vinyl Coral', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(58, 'Vinyl *Scraps', 7, '0.0000', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(59, 'ABS Lime', 1, '0.0500', NULL, 'gram(s)', 'c2e189', 'Y', 'Y', 17),
-(60, 'ABS Copper', 1, '0.0500', NULL, 'gram(s)', '7C4D3A', 'Y', 'Y', 17),
-(61, 'ABS Silver', 1, '0.0500', NULL, 'gram(s)', '9EA2A2', 'Y', 'Y', 17),
-(62, 'ABS Trans Black', 1, '0.0500', NULL, 'gram(s)', '919D9D', 'Y', 'Y', 17),
-(63, 'ABS Trans Blue', 1, '0.0500', NULL, 'gram(s)', 'C8D8EB', 'Y', 'Y', 17),
-(64, 'ABS Trans Yellow', 1, '0.0500', NULL, 'gram(s)', 'FFFF74', 'Y', 'Y', 17),
-(65, 'Vinyl Mint', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(66, 'Vinyl Lime Green', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(67, 'Vinyl Gold', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4),
-(68, 'Screen Ink(Generic)', NULL, '0.0500', NULL, 'gram(s)', NULL, 'Y', 'Y', 15),
-(69, 'NinjaFlex Water', 54, '0.1500', NULL, 'gram(s)', NULL, 'Y', 'Y', 20),
-(70, 'NinjaFlex Lava', 54, '0.1500', NULL, 'gram(s)', NULL, 'Y', 'Y', 20),
-(71, 'NinjaFlex Sapphire', 54, '0.1500', NULL, 'gram(s)', NULL, 'Y', 'Y', 20),
-(72, 'ABS Neon Green', 1, '0.0500', NULL, 'gram(s)', '77ff35', 'Y', 'Y', 17),
-(73, 'ABS Brown', 1, '0.0500', NULL, 'gram(s)', '721c00', 'Y', 'Y', 17),
-(74, 'ABS Beige', 1, '0.0500', NULL, 'gram(s)', 'f7f799', 'Y', 'Y', 17),
-(75, 'Comet White', 68, '0.0500', NULL, 'gram(s)', 'ffffff', 'Y', 'Y', 15),
-(76, 'Pitch Black', 68, '0.0500', NULL, 'gram(s)', '000000', 'Y', 'Y', 15),
-(77, 'Neptune Blue', 68, '0.0500', NULL, 'gram(s)', '0011ff', 'Y', 'Y', 15),
-(78, 'Mars Red', 68, '0.0500', NULL, 'gram(s)', 'ff0000', 'Y', 'Y', 15),
-(79, 'Starburst Yellow', 68, '0.0500', NULL, 'gram(s)', 'faff00', 'Y', 'Y', 15),
-(80, 'BYO Mats', NULL, '0.0000', NULL, 'inch(es)', NULL, 'Y', 'Y', 7),
-(81, 'BYO 3D Prima', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(82, 'BYO 3DFuel', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(83, 'BYO 3rDment', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(84, 'BYO Alchement', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(85, 'BYO ColorFabb', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(86, 'BYO Faberdashery', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(87, 'BYO Fenner Drives/Ninja', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(88, 'BYO Filamentum', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(89, 'BYO FormFutura', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(90, 'BYO GizmoDorks', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(91, 'BYO 3D FilaPrint', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(92, 'BYO IC3D', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(93, 'BYO Inland Plastics', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(94, 'BYO Lulzbot', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(95, 'BYO MakerBot', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(96, 'BYO MatterHackers', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(97, 'BYO PolyMaker', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(98, 'BYO Proto-Pasta', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(99, 'BYO Taulmann', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7),
-(100, 'Vinyl Sky Blue', 7, '0.2500', NULL, 'inch(es)', '7cc8ff', 'Y', 'Y', 4),
-(101, 'HT Hibiscous', 7, '0.3000', NULL, 'inch(es)', 'f44265', 'Y', 'Y', 4),
-(102, 'HT Bright Red', 7, '0.3000', NULL, 'inch(es)', 'ff0000', 'Y', 'Y', 4),
-(103, 'HT Orange', 7, '0.3000', NULL, 'inch(es)', 'ffa500', 'Y', 'Y', 4),
-(104, 'HT Red', 7, '0.3000', NULL, 'inch(es)', 'ea0b0b', 'Y', 'Y', 4),
-(105, 'HT Lemon Yellow', 7, '0.3000', NULL, 'inch(es)', 'fffa00', 'Y', 'Y', 4),
-(106, 'HT Texas Orange', 7, '0.3000', NULL, 'inch(es)', 'ff9102', 'Y', 'Y', 4),
-(107, 'HT Yellow', 7, '0.3000', NULL, 'inch(es)', 'ffc700', 'Y', 'Y', 4),
-(108, 'HT Sun Yellow', 7, '0.3000', NULL, 'inch(es)', 'ffb600', 'Y', 'Y', 4),
-(109, 'HT Lime', 7, '0.3000', NULL, 'inch(es)', '6bff02', 'Y', 'Y', 4),
-(110, 'HT Green Apple', 7, '0.3000', NULL, 'inch(es)', '5de000', 'Y', 'Y', 4),
-(111, 'HT Green', 7, '0.3000', NULL, 'inch(es)', '45a800', 'Y', 'Y', 4),
-(112, 'HT Dark Green', 7, '0.3000', NULL, 'inch(es)', '327a00', 'Y', 'Y', 4),
-(113, 'HT Sky Blue', 7, '0.3000', NULL, 'inch(es)', '0090ff', 'Y', 'Y', 4),
-(114, 'HT Royal Blue', 7, '0.3000', NULL, 'inch(es)', '0036ad', 'Y', 'Y', 4),
-(115, 'HT Lilac', 7, '0.3000', NULL, 'inch(es)', 'f27fff', 'Y', 'Y', 4),
-(116, 'HT Violet', 7, '0.3000', NULL, 'inch(es)', '6b0077', 'Y', 'Y', 4),
-(117, 'HT Black', 7, '0.3000', NULL, 'inch(es)', '000000', 'Y', 'Y', 4),
-(118, 'HT White', 7, '0.3000', NULL, 'inch(es)', 'ffffff', 'Y', 'Y', 4),
-(119, 'HT Silver', 7, '0.3000', NULL, 'inch(es)', 'adadad', 'Y', 'Y', 4),
-(120, 'HT Gold', 7, '0.3000', NULL, 'inch(es)', 'c6b900', 'Y', 'Y', 4),
-(121, 'BYO Copper Clad Board', NULL, '0.2500', NULL, 'in<sup>2</sup>', NULL, 'Y', 'Y', 7),
-(122, 'FabLab-Approved BYO PLA', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 2),
-(123, 'Sheet Goods', NULL, NULL, NULL, 'inch(es)', NULL, 'N', 'N', 1),
-(124, 'Clear Glass', 4, '0.0200', NULL, 'sq_inch(es)', NULL, 'Y', 'Y', 13),
-(125, 'Red Glass', 4, '0.0200', NULL, 'sq_inch(es)', 'ff0a00', 'Y', 'Y', 13),
-(126, 'Blue Glass', 4, '0.0200', NULL, 'sq_inch(es)', '0008ff', 'Y', 'Y', 13),
-(127, 'Pink Glass', 4, '0.0200', NULL, 'sq_inch(es)', 'ff00fa', 'Y', 'Y', 13),
-(128, 'Dark Basswood', 9, '0.0200', NULL, 'sq_inch(es)', '49320d', 'Y', 'Y', 9),
-(129, 'Light Basswood', 9, '0.0200', NULL, 'sq_inch(es)', '8c6500', 'Y', 'Y', 9),
-(130, 'Oak Wood', 8, '0.0200', NULL, 'sq_inch(es)', '805300', 'Y', 'Y', 10),
-(131, 'Cherry Wood', 8, '0.0200', NULL, 'sq_inch(es)', 'ff9f94', 'Y', 'Y', 10),
-(132, 'Birch Wood', 8, '0.0200', NULL, 'sq_inch(es)', 'efe0a7', 'Y', 'Y', 10),
-(133, 'Softwood Plywood', 10, '0.0200', NULL, 'sq_inch(es)', 'f1ecbc', 'Y', 'Y', 11),
-(134, 'Hardwood Plywood', 10, '0.0200', NULL, 'sq_inch(es)', 'cdb677', 'Y', 'Y', 11),
-(135, 'Black Glass', 4, '0.0200', NULL, 'sq_inch(es)', '000000', 'Y', 'Y', 13),
-(136, 'Clear Acrylic', 2, '0.0200', NULL, 'sq_inch(es)', NULL, 'Y', 'Y', 8),
-(137, 'Purple Glass', 4, '0.0200', NULL, 'sq_inch(es)', 'b95aff', 'Y', 'Y', 13),
-(138, 'Sheet Test', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'Y', 'Y', 12),
-(139, 'Brown Sheet', 138, '0.0200', NULL, 'sq_inch(es)', '804040', 'Y', 'Y', 12);
+INSERT INTO `materials` (`m_id`, `m_name`, `m_parent`, `price`, `product_number`, `unit`, `color_hex`, `measurable`, `current`, `c_id`, `update_reason`) VALUES
+(1, 'ABS (Generic)', NULL, '0.0000', NULL, 'gram(s)', NULL, 'N', 'Y', 17, NULL),
+(2, 'Acrylic', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 8, NULL),
+(3, 'Cotton', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 6, NULL),
+(4, 'Glass (Generic)', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 13, NULL),
+(5, 'Leather', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 6, NULL),
+(6, 'FabLab PLA', NULL, '0.0500', NULL, 'gram(s)', NULL, 'Y', 'Y', 18, NULL),
+(7, 'Vinyl (Generic)', NULL, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(8, 'Wood', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 10, NULL),
+(9, 'Basswood', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 9, NULL),
+(10, 'Plywood', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'N', 'Y', 11, NULL),
+(11, 'MDF', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 7, NULL),
+(12, 'Other', NULL, NULL, NULL, '', NULL, 'N', 'Y', 7, NULL),
+(13, 'ABS Black', 1, '0.0500', '3D ABS-1KG1.75-BLK', 'gram(s)', '000000', 'Y', 'Y', 17, NULL),
+(14, 'ABS Blue', 1, '0.0500', NULL, 'gram(s)', '0047BB', 'Y', 'Y', 17, NULL),
+(15, 'ABS Green', 1, '0.0500', NULL, 'gram(s)', '00BF6F', 'Y', 'Y', 17, NULL),
+(16, 'ABS Orange', 1, '0.0500', NULL, 'gram(s)', 'fe5000', 'Y', 'Y', 17, NULL),
+(17, 'ABS Red', 1, '0.0500', NULL, 'gram(s)', 'D22630', 'Y', 'Y', 17, NULL),
+(18, 'ABS Purple', 1, '0.0500', NULL, 'gram(s)', '440099', 'Y', 'Y', 17, NULL),
+(19, 'ABS Yellow', 1, '0.0500', NULL, 'gram(s)', 'FFE900', 'Y', 'Y', 17, NULL),
+(20, 'Vinyl Black', 7, '0.2500', NULL, 'inch(es)', '000000', 'Y', 'Y', 4, NULL),
+(21, 'Vinyl Sapphire Gloss', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(22, 'Vinyl Green', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(23, 'Vinyl Orange', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(24, 'Vinyl Cherry Red Matte', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(25, 'Vinyl Plum', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(26, 'Vinyl Yellow', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(27, 'uPrint Material', NULL, '8.1900', NULL, 'inch<sup>3</sup>', 'fdffe2', 'Y', 'Y', 19, NULL),
+(28, 'BYO Hatchbox', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(29, 'ABS White', 1, '0.0500', NULL, 'gram(s)', 'ffffff', 'Y', 'Y', 17, NULL),
+(30, 'Vinyl White', 7, '0.2500', NULL, 'inch(es)', 'ffffff', 'Y', 'Y', 4, NULL),
+(31, 'Transfer Tape', NULL, '0.1000', NULL, 'inch(es)', NULL, 'Y', 'Y', 7, NULL),
+(32, 'uPrint Support', NULL, '8.1900', NULL, 'inch<sup>3</sup>', NULL, 'Y', 'Y', 19, NULL),
+(33, 'ABS Bronze', 1, '0.0500', NULL, 'gram(s)', 'A09200', 'Y', 'Y', 17, NULL),
+(35, 'ABS Pink', 1, '0.0500', NULL, 'gram(s)', 'FF3EB5', 'Y', 'Y', 17, NULL),
+(36, 'ABS Mint', 1, '0.0500', NULL, 'gram(s)', '88DBDF', 'Y', 'Y', 17, NULL),
+(37, 'ABS Glow in the dark', 1, '0.0500', NULL, 'gram(s)', 'D0DEBB', 'Y', 'Y', 17, NULL),
+(38, 'ABS Trans Orange', 1, '0.0500', NULL, 'gram(s)', 'FCC89B', 'Y', 'Y', 17, NULL),
+(39, 'ABS Trans Red', 1, '0.0500', NULL, 'gram(s)', 'DF4661', 'Y', 'Y', 17, NULL),
+(40, 'ABS Trans White', 1, '0.0500', NULL, 'gram(s)', 'D9D9D6', 'Y', 'Y', 17, NULL),
+(41, 'ABS Trans Green', 1, '0.0500', NULL, 'gram(s)', 'A0DAB3', 'Y', 'Y', 17, NULL),
+(42, 'ABS Gold', 1, '0.0500', NULL, 'gram(s)', 'CFB500', 'Y', 'Y', 17, NULL),
+(43, 'Vinyl Ocean Blue', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(44, 'Vinyl Red Gloss', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(45, 'Vinyl Pink', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(46, 'Vinyl Teal Gloss', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(48, 'Vinyl Silver', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(49, 'uPrint Bed New', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 19, NULL),
+(50, 'uPrint Bed Partly_Used', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 19, NULL),
+(51, 'Delrin Sheet', NULL, '0.0000', NULL, '', NULL, 'N', 'Y', 7, NULL),
+(52, 'Thread', NULL, '1.0000', NULL, 'hour(s)', NULL, 'Y', 'Y', 6, NULL),
+(53, 'Paper-stock (chipboard)', NULL, NULL, NULL, '', NULL, 'N', 'Y', 7, NULL),
+(54, 'NinjaFlex (Generic)', NULL, '0.1500', NULL, 'gram(s)', NULL, 'N', 'Y', 20, NULL),
+(55, 'NinjaFlex Black', 54, '0.1500', NULL, 'gram(s)', '000000', 'Y', 'Y', 20, NULL),
+(56, 'NinjaFlex White', 54, '0.1500', NULL, 'gram(s)', 'ffffff', 'Y', 'Y', 20, NULL),
+(57, 'Vinyl Coral', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(58, 'Vinyl *Scraps', 7, '0.0000', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(59, 'ABS Lime', 1, '0.0500', NULL, 'gram(s)', 'c2e189', 'Y', 'Y', 17, NULL),
+(60, 'ABS Copper', 1, '0.0500', NULL, 'gram(s)', '7C4D3A', 'Y', 'Y', 17, NULL),
+(61, 'ABS Silver', 1, '0.0500', NULL, 'gram(s)', '9EA2A2', 'Y', 'Y', 17, NULL),
+(62, 'ABS Trans Black', 1, '0.0500', NULL, 'gram(s)', '919D9D', 'Y', 'Y', 17, NULL),
+(63, 'ABS Trans Blue', 1, '0.0500', NULL, 'gram(s)', 'C8D8EB', 'Y', 'Y', 17, NULL),
+(64, 'ABS Trans Yellow', 1, '0.0500', NULL, 'gram(s)', 'FFFF74', 'Y', 'Y', 17, NULL),
+(65, 'Vinyl Mint', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(66, 'Vinyl Lime Green', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(67, 'Vinyl Gold', 7, '0.2500', NULL, 'inch(es)', NULL, 'Y', 'Y', 4, NULL),
+(68, 'Screen Ink(Generic)', NULL, '0.0500', NULL, 'gram(s)', NULL, 'Y', 'Y', 15, NULL),
+(69, 'NinjaFlex Water', 54, '0.1500', NULL, 'gram(s)', NULL, 'Y', 'Y', 20, NULL),
+(70, 'NinjaFlex Lava', 54, '0.1500', NULL, 'gram(s)', NULL, 'Y', 'Y', 20, NULL),
+(71, 'NinjaFlex Sapphire', 54, '0.1500', NULL, 'gram(s)', NULL, 'Y', 'Y', 20, NULL),
+(72, 'ABS Neon Green', 1, '0.0500', NULL, 'gram(s)', '77ff35', 'Y', 'Y', 17, NULL),
+(73, 'ABS Brown', 1, '0.0500', NULL, 'gram(s)', '721c00', 'Y', 'Y', 17, NULL),
+(74, 'ABS Beige', 1, '0.0500', NULL, 'gram(s)', 'f7f799', 'Y', 'Y', 17, NULL),
+(75, 'Comet White', 68, '0.0500', NULL, 'gram(s)', 'ffffff', 'Y', 'Y', 15, NULL),
+(76, 'Pitch Black', 68, '0.0500', NULL, 'gram(s)', '000000', 'Y', 'Y', 15, NULL),
+(77, 'Neptune Blue', 68, '0.0500', NULL, 'gram(s)', '0011ff', 'Y', 'Y', 15, NULL),
+(78, 'Mars Red', 68, '0.0500', NULL, 'gram(s)', 'ff0000', 'Y', 'Y', 15, NULL),
+(79, 'Starburst Yellow', 68, '0.0500', NULL, 'gram(s)', 'faff00', 'Y', 'Y', 15, NULL),
+(80, 'BYO Mats', NULL, '0.0000', NULL, 'inch(es)', NULL, 'Y', 'Y', 7, NULL),
+(81, 'BYO 3D Prima', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(82, 'BYO 3DFuel', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(83, 'BYO 3rDment', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(84, 'BYO Alchement', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(85, 'BYO ColorFabb', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(86, 'BYO Faberdashery', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(87, 'BYO Fenner Drives/Ninja', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(88, 'BYO Filamentum', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(89, 'BYO FormFutura', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(90, 'BYO GizmoDorks', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(91, 'BYO 3D FilaPrint', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(92, 'BYO IC3D', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(93, 'BYO Inland Plastics', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(94, 'BYO Lulzbot', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(95, 'BYO MakerBot', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(96, 'BYO MatterHackers', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(97, 'BYO PolyMaker', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(98, 'BYO Proto-Pasta', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(99, 'BYO Taulmann', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 7, NULL),
+(100, 'Vinyl Sky Blue', 7, '0.2500', NULL, 'inch(es)', '7cc8ff', 'Y', 'Y', 4, NULL),
+(101, 'HT Hibiscous', 7, '0.3000', NULL, 'inch(es)', 'f44265', 'Y', 'Y', 4, NULL),
+(102, 'HT Bright Red', 7, '0.3000', NULL, 'inch(es)', 'ff0000', 'Y', 'Y', 4, NULL),
+(103, 'HT Orange', 7, '0.3000', NULL, 'inch(es)', 'ffa500', 'Y', 'Y', 4, NULL),
+(104, 'HT Red', 7, '0.3000', NULL, 'inch(es)', 'ea0b0b', 'Y', 'Y', 4, NULL),
+(105, 'HT Lemon Yellow', 7, '0.3000', NULL, 'inch(es)', 'fffa00', 'Y', 'Y', 4, NULL),
+(106, 'HT Texas Orange', 7, '0.3000', NULL, 'inch(es)', 'ff9102', 'Y', 'Y', 4, NULL),
+(107, 'HT Yellow', 7, '0.3000', NULL, 'inch(es)', 'ffc700', 'Y', 'Y', 4, NULL),
+(108, 'HT Sun Yellow', 7, '0.3000', NULL, 'inch(es)', 'ffb600', 'Y', 'Y', 4, NULL),
+(109, 'HT Lime', 7, '0.3000', NULL, 'inch(es)', '6bff02', 'Y', 'Y', 4, NULL),
+(110, 'HT Green Apple', 7, '0.3000', NULL, 'inch(es)', '5de000', 'Y', 'Y', 4, NULL),
+(111, 'HT Green', 7, '0.3000', NULL, 'inch(es)', '45a800', 'Y', 'Y', 4, NULL),
+(112, 'HT Dark Green', 7, '0.3000', NULL, 'inch(es)', '327a00', 'Y', 'Y', 4, NULL),
+(113, 'HT Sky Blue', 7, '0.3000', NULL, 'inch(es)', '0090ff', 'Y', 'Y', 4, NULL),
+(114, 'HT Royal Blue', 7, '0.3000', NULL, 'inch(es)', '0036ad', 'Y', 'Y', 4, NULL),
+(115, 'HT Lilac', 7, '0.3000', NULL, 'inch(es)', 'f27fff', 'Y', 'Y', 4, NULL),
+(116, 'HT Violet', 7, '0.3000', NULL, 'inch(es)', '6b0077', 'Y', 'Y', 4, NULL),
+(117, 'HT Black', 7, '0.3000', NULL, 'inch(es)', '000000', 'Y', 'Y', 4, NULL),
+(118, 'HT White', 7, '0.3000', NULL, 'inch(es)', 'ffffff', 'Y', 'Y', 4, NULL),
+(119, 'HT Silver', 7, '0.3000', NULL, 'inch(es)', 'adadad', 'Y', 'Y', 4, NULL),
+(120, 'HT Gold', 7, '0.3000', NULL, 'inch(es)', 'c6b900', 'Y', 'Y', 4, NULL),
+(121, 'BYO Copper Clad Board', NULL, '0.2500', NULL, 'in<sup>2</sup>', NULL, 'Y', 'Y', 7, NULL),
+(122, 'FabLab-Approved BYO PLA', NULL, '0.0000', NULL, 'gram(s)', NULL, 'Y', 'Y', 2, NULL),
+(123, 'Sheet Goods', NULL, NULL, NULL, 'inch(es)', NULL, 'N', 'N', 1, NULL),
+(124, 'Clear Glass', 4, '0.0200', NULL, 'sq_inch(es)', NULL, 'Y', 'Y', 13, NULL),
+(125, 'Red Glass', 4, '0.0200', NULL, 'sq_inch(es)', 'ff0a00', 'Y', 'Y', 13, NULL),
+(126, 'Blue Glass', 4, '0.0200', NULL, 'sq_inch(es)', '0008ff', 'Y', 'Y', 13, NULL),
+(127, 'Pink Glass', 4, '0.0200', NULL, 'sq_inch(es)', 'ff00fa', 'Y', 'Y', 13, NULL),
+(128, 'Dark Basswood', 9, '0.0200', NULL, 'sq_inch(es)', '49320d', 'Y', 'Y', 9, NULL),
+(129, 'Light Basswood', 9, '0.0200', NULL, 'sq_inch(es)', '8c6500', 'Y', 'Y', 9, NULL),
+(130, 'Oak Wood', 8, '0.0200', NULL, 'sq_inch(es)', '805300', 'Y', 'Y', 10, NULL),
+(131, 'Cherry Wood', 8, '0.0200', NULL, 'sq_inch(es)', 'ff9f94', 'Y', 'Y', 10, NULL),
+(132, 'Birch Wood', 8, '0.0200', NULL, 'sq_inch(es)', 'efe0a7', 'Y', 'Y', 10, NULL),
+(133, 'Softwood Plywood', 10, '0.0200', NULL, 'sq_inch(es)', 'f1ecbc', 'Y', 'Y', 11, NULL),
+(134, 'Hardwood Plywood', 10, '0.0200', NULL, 'sq_inch(es)', 'cdb677', 'Y', 'Y', 11, NULL),
+(135, 'Black Glass', 4, '0.0200', NULL, 'sq_inch(es)', '000000', 'Y', 'Y', 13, NULL),
+(136, 'Clear Acrylic', 2, '0.0200', NULL, 'sq_inch(es)', NULL, 'Y', 'Y', 8, NULL),
+(137, 'Purple Glass', 4, '0.0200', NULL, 'sq_inch(es)', 'b95aff', 'Y', 'Y', 13, NULL),
+(138, 'Sheet Test', 123, '0.0200', NULL, 'sq_inch(es)', NULL, 'Y', 'Y', 12, NULL),
+(139, 'Brown Sheet', 138, '0.0200', NULL, 'sq_inch(es)', '804040', 'Y', 'Y', 12, NULL);
 
 -- --------------------------------------------------------
 
@@ -784,7 +821,7 @@ CREATE TABLE IF NOT EXISTS `mats_used` (
   `quantity` decimal(7,2) DEFAULT NULL,
   `status_id` int(4) NOT NULL,
   `staff_id` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `mats_used`
@@ -794,7 +831,9 @@ INSERT INTO `mats_used` (`mu_id`, `trans_id`, `m_id`, `quantity`, `status_id`, `
 (1, NULL, 18, '120.00', 6, '1000000010'),
 (2, NULL, 4, '1000.00', 6, '1000000010'),
 (3, NULL, 135, '1000.00', 6, '1000000010'),
-(4, NULL, 135, '9999.00', 6, '1000000010');
+(4, NULL, 135, '9999.00', 6, '1000000010'),
+(5, NULL, 9, '4.00', 4, '1000000010'),
+(6, NULL, 9, '2.00', 2, '1000000010');
 
 -- --------------------------------------------------------
 
@@ -811,6 +850,30 @@ CREATE TABLE IF NOT EXISTS `objbox` (
   `trans_id` int(11) DEFAULT NULL,
   `staff_id` varchar(10) DEFAULT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=13485 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oos_alert`
+--
+
+CREATE TABLE IF NOT EXISTS `oos_alert` (
+  `a_id` int(11) NOT NULL,
+  `a_name` varchar(255) NOT NULL,
+  `min_qty` int(11) DEFAULT '1',
+  `email_id` int(11) NOT NULL,
+  `trig_time` int(11) DEFAULT '8',
+  `is_active` tinyint(1) DEFAULT '1',
+  `material_tag` text
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `oos_alert`
+--
+
+INSERT INTO `oos_alert` (`a_id`, `a_name`, `min_qty`, `email_id`, `trig_time`, `is_active`, `material_tag`) VALUES
+(1, 'All inventory', 1, 1, 8, 1, '0_1_2_3_4_5_6_'),
+(2, 'All', 2, 2, 8, 1, '3_4_5_');
 
 -- --------------------------------------------------------
 
@@ -1593,6 +1656,18 @@ ALTER TABLE `acct_charge`
   ADD PRIMARY KEY (`ac_id`);
 
 --
+-- Indexes for table `all_good_inventory`
+--
+ALTER TABLE `all_good_inventory`
+  ADD PRIMARY KEY (`inv_id`);
+
+--
+-- Indexes for table `all_good_transactions`
+--
+ALTER TABLE `all_good_transactions`
+  ADD PRIMARY KEY (`ag_trans_ID`);
+
+--
 -- Indexes for table `authrecipients`
 --
 ALTER TABLE `authrecipients`
@@ -1645,6 +1720,12 @@ ALTER TABLE `device_materials`
   ADD PRIMARY KEY (`dm_id`);
 
 --
+-- Indexes for table `email`
+--
+ALTER TABLE `email`
+  ADD PRIMARY KEY (`id_email`);
+
+--
 -- Indexes for table `error`
 --
 ALTER TABLE `error`
@@ -1669,6 +1750,13 @@ ALTER TABLE `mats_used`
 ALTER TABLE `objbox`
   ADD PRIMARY KEY (`o_id`),
   ADD KEY `trans_id` (`trans_id`);
+
+--
+-- Indexes for table `oos_alert`
+--
+ALTER TABLE `oos_alert`
+  ADD PRIMARY KEY (`a_id`),
+  ADD KEY `email_id` (`email_id`);
 
 --
 -- Indexes for table `purpose`
@@ -1816,7 +1904,7 @@ ALTER TABLE `carrier`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `citation`
 --
@@ -1838,6 +1926,11 @@ ALTER TABLE `device_group`
 ALTER TABLE `device_materials`
   MODIFY `dm_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=126;
 --
+-- AUTO_INCREMENT for table `email`
+--
+ALTER TABLE `email`
+  MODIFY `id_email` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
 -- AUTO_INCREMENT for table `error`
 --
 ALTER TABLE `error`
@@ -1846,17 +1939,22 @@ ALTER TABLE `error`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=140;
+  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=149;
 --
 -- AUTO_INCREMENT for table `mats_used`
 --
 ALTER TABLE `mats_used`
-  MODIFY `mu_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `mu_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `objbox`
 --
 ALTER TABLE `objbox`
   MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13485;
+--
+-- AUTO_INCREMENT for table `oos_alert`
+--
+ALTER TABLE `oos_alert`
+  MODIFY `a_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `rfid`
 --
@@ -1942,6 +2040,12 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `materials`
   ADD CONSTRAINT `materials_ibfk_1` FOREIGN KEY (`c_id`) REFERENCES `categories` (`c_id`);
+
+--
+-- Constraints for table `oos_alert`
+--
+ALTER TABLE `oos_alert`
+  ADD CONSTRAINT `oos_alert_ibfk_1` FOREIGN KEY (`email_id`) REFERENCES `email` (`id_email`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
