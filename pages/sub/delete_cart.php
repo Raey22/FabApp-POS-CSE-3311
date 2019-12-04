@@ -30,6 +30,6 @@
     $_SESSION['co_quantity'] = array_values($_SESSION['co_quantity']);
 
 
-	$_SESSION['success_msg'] = "Product deleted from cart";
+	// $_SESSION['success_msg'] = "Product deleted from cart";
 	header('Location: /pages/cart.php');
 ?>

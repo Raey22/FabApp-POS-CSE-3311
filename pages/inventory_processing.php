@@ -234,11 +234,11 @@ function successful_and_failed_device_group_additions($m_id, $device_group) {
 
 ?>
 
-<title><?php echo $sv['site_name'];?> Edit Inventory</title>
+<title><?php echo $sv['site_name'];?> Manage Inventory</title>
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">Edit Inventory</h1>
+			<h1 class="page-header"> Manage Inventory</h1>
 		</div>
 	</div>
 	
@@ -267,8 +267,9 @@ function successful_and_failed_device_group_additions($m_id, $device_group) {
 			<!-- /.panel-heading -->
 			<div class='collapse in inventory_collapse' id='collapse'>
 				<div class="panel-body">
-					<table class="table-striped table-bordered table-responsive col-md-12" id="update_mat_table">
-						<thead>
+					<table class="table-striped table-bordered table-responsive table-dark" id="update_mat_table" cellspacing="0">
+						<thead class="thead-light thead-dark
+">
 							<th class='col-md-2' style="text-align:center;">Inventory</th>
 							<th class='col-md-2' style="text-align:center;">Change In Quantity</th>
 							<th class='col-md-1' style="text-align:center;">Status</th>

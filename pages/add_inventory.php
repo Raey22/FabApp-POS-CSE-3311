@@ -20,7 +20,7 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
   header('Location: /index.php');
   exit();
 }
-//function for the from to edit the category passed are the category name and the parent category names
+//function for the from to edit the inventory passed 
 function renderForm( $mysqli, $error)
 {
   ?>
@@ -53,7 +53,7 @@ function renderForm( $mysqli, $error)
             </div>
             <div class="form-group col-lg-12">
               <label for="materialName">Material Name:</label>
-     
+              <!-- Select a material within the category the button was clicked -->
               <select class="form-control dm_select" id="m_id" placeholder="Enter name" name="m_id" required>
 										<option selected='selected' value="NONE">Select Material</option>
 									 <?php

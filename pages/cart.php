@@ -86,7 +86,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['endCartBtn'])) {
   unset($_SESSION['co_quantity']);
   unset($_SESSION['co_price']);
   header("Location: /pages/cart.php");
-  $_SESSION['success_msg'] = "Cart has been successfully emptied";
+  // $_SESSION['success_msg'] = "Cart has been successfully emptied";
 }
 
 // Refresh button

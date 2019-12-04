@@ -44,28 +44,28 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <i class="fas fa-warehouse"></i> All Goods Inventory
-            
+          <i class="fas fa-warehouse"></i> All Goods Inventory
           </div>
+          
 
-          <!-- Search Bar -->
+          <!-- Search Bar
           <div class="col-md-6">
             <input type="text" class="form-control"  id="searchBar" onkeyup="searchTable()" placeholder="Search for materials..">
           </div>
-          <br>
+          <br> -->
 
           <!-- /.panel-heading -->
           <div class="panel-body">
             <div style="height:450px;overflow:auto;">
               <div class="table-responsive">
-                <table id="goodsTable" class="table table-striped table-bordered table-hover" >
+                <table id="goodsTable"  class="table table-striped table-bordered table-sm table-hover" cellspacing="0"  >
                   <thead>
-                    <tr class="tablerow">
-                      <th><i class="fas fa-square"></i> Sheet Material</th>
-                      <th><i class="fas fa-ruler-combined"></i> Size (Inches)</th>
-                      <th><i class="fas fa-weight"></i> Weight (grams)</th>
-                      <th><i class="fas fa-money-bill-wave-alt"></i> Cost</th>
-                      <th><i class="fas fa-boxes"></i> Quantity</th>
+                    <tr >
+                      <th class = "th-sm" style="text-align:center;"><i class="fas fa-square" ></i> Material</th>
+                      <th class = "th-sm" style="text-align:center;"><i class="fas fa-ruler-combined"></i> Size (Inches)</th>
+                      <th class = "th-sm" style="text-align:center;"><i class="fas fa-weight"></i> Weight (grams)</th>
+                      <th class = "th-sm" style="text-align:center;"><i class="fas fa-money-bill-wave-alt"></i> Cost</th>
+                      <th class = "th-sm" style="text-align:center;"><i class="fas fa-boxes"></i> Quantity</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -150,7 +150,7 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 
 var str;
 for(var i=1; i<= <?php echo $number_of_sheet_tables;?>; i++){
-  str = "#sheetsTable_"+i
+  str = "#goodsTable"+i
   $(str).DataTable({
     "iDisplayLength": 10,
     "product": []
@@ -205,6 +205,9 @@ function searchTable() {
     }
   }
 }
-
+$('#goodsTable').DataTable({
+		"iDisplayLength": 25,
+		"order": []
+	});
 </script>
 </html>

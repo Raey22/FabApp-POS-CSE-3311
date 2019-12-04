@@ -365,6 +365,20 @@ class Materials {
 		return false;
 	}
 
+	public static function good_quantity($inv_id) {
+		global $mysqli;
+
+		if (preg_match("/^\d+$/", $inv_id)) {
+			if($result = $mysqli->query("
+				SELECT `quantity`
+				FROM `all_good_inventory`
+				WHERE `inv_id` = '$inv_id';
+			"))
+				return $result->fetch_object()->quantity;
+		}
+		return false;
+	}
+
 	
 	public static function sold_sheet_quantity($inv_id, $quantity) {
 		global $mysqli;
@@ -373,7 +387,23 @@ class Materials {
 
 		if($inv_id1) {
 			if($mysqli->query("
-				UPDATE `sheet_good_inventory`
+				UPDATE `all_good_inventory`
+				SET `quantity` = `quantity` - '$quantity'
+				WHERE `inv_ID` = '$inv_id';
+			"))
+				return true;
+		}
+		return false;
+	}
+
+	public static function sold_good_quantity($inv_id, $quantity) {
+		global $mysqli;
+
+		$inv_id1 = Mats_Used::regexID($inv_id);
+
+		if($inv_id1) {
+			if($mysqli->query("
+				UPDATE `all_good_inventory`
 				SET `quantity` = `quantity` - '$quantity'
 				WHERE `inv_ID` = '$inv_id';
 			"))
@@ -409,6 +439,21 @@ class Materials {
 		if($inv_id1) {
 			if($mysqli->query("
 				UPDATE `sheet_good_inventory`
+				SET `quantity` = '$quantity'
+				WHERE `inv_id` = '$inv_id';
+			"))
+				return true;
+		}
+		return false;
+	}
+	public static function update_good_quantity($inv_id, $quantity) {
+		global $mysqli;
+
+		$inv_id1 = Mats_Used::regexID($inv_id);
+
+		if($inv_id1) {
+			if($mysqli->query("
+				UPDATE `all_good_inventory`
 				SET `quantity` = '$quantity'
 				WHERE `inv_id` = '$inv_id';
 			"))
