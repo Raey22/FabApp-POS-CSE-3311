@@ -186,7 +186,7 @@ if (isset($_POST['submit']))
       }
 
       // once saved, redirect back to the view page
-      header("Location: show_inventory.php");
+      header("Location: inventory.php");
     }
   }
   else

@@ -132,17 +132,24 @@ if(isset($_POST['submit']))
   if (is_numeric($_POST['id']))
   {
    
-      header("Location: inventory.php?");
+      header("Location: inventory.php");
       $m_id = mysql_real_escape_string(htmlspecialchars($_POST['m_id']));
       $width = mysql_real_escape_string(htmlspecialchars($_POST['width']));
       $height = mysql_real_escape_string(htmlspecialchars($_POST['height']));
       $weight = mysql_real_escape_string(htmlspecialchars($_POST['weight']));
       $quantity = mysql_real_escape_string(htmlspecialchars($_POST['quantity']));
-      //$result = $mysqli->query("INSERT INTO `all_good_inventory`(`m_id`, `m_parent`, `width`, `height`, `weight`, `quantity`) 
-      //VALUES ({$m_id},{$width},{$height},{$weight},{$quantity}");
+
+      $result = $mysqli->query("SELECT MAX(inv_id) FROM all_good_inventory");
+              $id = $result->fetch_assoc();
+              $id = $id['MAX(inv_id)']+ 1;
+      
+      $query = "INSERT INTO `all_good_inventory`
+      (`inv_id`,`m_id`, `m_parent`, `width`, `height`, `weight`, `quantity`) VALUES ($id,$m_id,NULL,$width,$height,$weight,$quantity)";
+      $mysqli->query($query) or die(mysql_error());
+
 
       
-      $resultStr = Materials::create_new_inventory($m_id, $width, $height, $weight, $quantity);
+      //$resultStr = Materials::create_new_inventory($m_id, $width, $height, $weight, $quantity);
       // once saved, redirect back to the view page
       
       

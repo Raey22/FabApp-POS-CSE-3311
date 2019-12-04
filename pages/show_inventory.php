@@ -58,7 +58,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 								<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
 									<th class='col-md-1'>Edit</th>
 								<? }?>
+								<th class='col-md-1'>ID</th>
 								<th class='col-md-4'>Material Name</th>
+								
                 <th class='col-md-2'>Product Number</th>
 				<th class='col-md-1'>Height</th>
 				<th class='col-md-1'>Width</th>
@@ -94,8 +96,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 								<tr>
 									<!-- Prevents edit access from unauthorized users -->
 									<?php if(!(is_null($staff)) && ($staff->getRoleID() >= $sv['LvlOfLead'])) { ?>
-										<td><a href="edit_product.php?id=<?php echo ("".$row['m_id']); ?>"  class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a></td>
+										<td><a href="edit_product.php?id=<?php echo ("".$row['inv_id']); ?>"  class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a></td>
 									<? }?>
+									<td><?php echo $row['inv_id']; ?></td>
 									<td><?php echo $row['m_name']; ?></td>
 									<td><?php echo $row['product_number']; ?></td>
                   					<td><?php echo $row['price']; ?></td>

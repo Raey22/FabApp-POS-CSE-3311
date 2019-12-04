@@ -55,13 +55,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_inventory'])) {
 		if(is_int(Mats_Used::insert_material_used(null, $val[1], $val[3], $staff, -1 * floatval($val[2]))))
 			$outcomes[] = "S".str_replace(' ', '_', $val[0]);
 		else $outcomes[] = "F".str_replace(' ', '_', $val[0]);
-		if($val[3] == 2 || $val[3] == 3 || $val[3] == 4)
+		if($val[3] == 2 ||  $val[3] == 4)
 		{
 			$q = "SELECT quantity FROM all_good_inventory WHERE inv_id = $val[1]";
 			$res = $mysqli->query($q);
 			if($row = $res->fetch_assoc())
 			{
 				$quantity = $row['quantity'] - $val[2];
+
+				$query = "UPDATE all_good_inventory SET quantity = $quantity WHERE inv_id = $val[1]";
+				$mysqli->query($query) or die(mysql_error());
+			}
+
+			
+		}
+		else 
+		{
+			$q = "SELECT quantity FROM all_good_inventory WHERE inv_id = $val[1]";
+			$res = $mysqli->query($q);
+			if($row = $res->fetch_assoc())
+			{
+				$quantity = $row['quantity'] + $val[2];
 
 				$query = "UPDATE all_good_inventory SET quantity = $quantity WHERE inv_id = $val[1]";
 				$mysqli->query($query) or die(mysql_error());
