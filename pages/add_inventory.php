@@ -41,6 +41,7 @@ function renderForm( $mysqli, $error)
           if($error != '') {
             echo '<div style="padding:4px; border:1px solid red; color:red;">'.$error.'</div>';
           }
+	//find what the next id would be to assign it to the new inventory
               $result = $mysqli->query("SELECT MAX(inv_id) FROM all_good_inventory");
               $id = $result->fetch_assoc();
               $id = $id['MAX(inv_id)']+ 1;
@@ -52,6 +53,7 @@ function renderForm( $mysqli, $error)
               <p><strong>ID:</strong> <?php echo $id; ?></p>
             </div>
             <div class="form-group col-lg-12">
+		<!-- Select Material Name -->
               <label for="materialName">Material Name:</label>
               <!-- Select a material within the category the button was clicked -->
               <select class="form-control dm_select" id="m_id" placeholder="Enter name" name="m_id" required>
@@ -68,34 +70,36 @@ function renderForm( $mysqli, $error)
 										?>
 										
 									</select>
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+         
             </div>
-            
+            <!-- Get Width -->
             <div class="form-group col-lg-4">
               <label for="width">Width:</label>
               <div class="input-group" >
               <input type="number" class="form-control"name="width" id="width" max="500" min="1" value="0" step="0.1" placeholder="Enter Width" />
 													<span class="input-group-addon unit">inch(es)</span>
 								</div>
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+    
             </div>
+	<!-- Get Height -->  
             <div class="form-group col-lg-4">
               <label for="height">Height:</label>
               <div class="input-group" >
               <input type="number" class="form-control"name="height" id="height" max="500" min="1" value="0" step="0.1" placeholder="Enter Height" />
 													<span class="input-group-addon unit">inch(es)</span>
 								</div>
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            
             </div>
+	<!-- Get Weight -->
             <div class="form-group col-lg-4">
               <label for="weight">Weight:</label>
               <div class="input-group" >
               <input type="number" class="form-control"name="weight" id="weight" max="500" min="1" value="0" step="0.1" placeholder="Enter Weight" />
 													<span class="input-group-addon unit">gram(s)</span>
 								</div>
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+             
             </div>
-            
+            <!-- Get quantity -->
             <div class="form-group col-lg-12">
               <label for="quantity">Quantity:</label>
               <div class="input-group" >
@@ -104,7 +108,7 @@ function renderForm( $mysqli, $error)
               <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
             
-
+	<!-- Submit or Cancel -->
             <div class="col-lg-12">
               <input action="action" onclick="window.history.go(-1); return false;" class="btn" type="button" value="Cancel" />
               <button type="submit" name="submit" class="btn btn-primary">Submit</button>
@@ -129,20 +133,23 @@ function renderForm( $mysqli, $error)
 
 if(isset($_POST['submit']))
 {
+// check if the id is valid 
   if (is_numeric($_POST['id']))
   {
    
+      //redirect to inventory page
       header("Location: inventory.php");
+      //get values from the form 
       $m_id = mysql_real_escape_string(htmlspecialchars($_POST['m_id']));
       $width = mysql_real_escape_string(htmlspecialchars($_POST['width']));
       $height = mysql_real_escape_string(htmlspecialchars($_POST['height']));
       $weight = mysql_real_escape_string(htmlspecialchars($_POST['weight']));
       $quantity = mysql_real_escape_string(htmlspecialchars($_POST['quantity']));
-
+     
       $result = $mysqli->query("SELECT MAX(inv_id) FROM all_good_inventory");
               $id = $result->fetch_assoc();
               $id = $id['MAX(inv_id)']+ 1;
-      
+       //put the inventory created in the db 
       $query = "INSERT INTO `all_good_inventory`
       (`inv_id`,`m_id`, `m_parent`, `width`, `height`, `weight`, `quantity`) VALUES ($id,$m_id,NULL,$width,$height,$weight,$quantity)";
       $mysqli->query($query) or die(mysql_error());
@@ -150,7 +157,7 @@ if(isset($_POST['submit']))
 
       
       //$resultStr = Materials::create_new_inventory($m_id, $width, $height, $weight, $quantity);
-      // once saved, redirect back to the view page
+ 
       
       
     
