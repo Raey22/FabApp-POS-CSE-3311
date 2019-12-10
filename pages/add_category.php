@@ -20,7 +20,7 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
   header('Location: /index.php');
   exit();
 }
-//function for the from to edit the category passed are the category name and the parent category names
+//function for the from to edit the category passed 
 function renderForm( $mysqli, $error)
 {
   ?>
@@ -55,7 +55,6 @@ function renderForm( $mysqli, $error)
             <div class="form-group col-lg-12">
               <label for="categoryName">Category Name:</label>
               <input type="text" class="form-control" id="c_Name" placeholder="Enter name" name="c_name" required>
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
            
             <div class="col-lg-12">
@@ -68,7 +67,7 @@ function renderForm( $mysqli, $error)
              $q = "SELECT * FROM categories WHERE 1";
               if($res = $mysqli->query($q))
               {
-                //If a category is None then that mean it is a parent category
+                //If a category is None then that means it is a parent category
                 echo "<option selected value=NULL>None</option>";
                 while($row = $res->fetch_assoc()){
                   echo "<option value=".$row['c_id'].">".$row['c_name']."</option>";
@@ -125,7 +124,7 @@ if (isset($_POST['submit']))
       // save the data to the database;
       $query = "INSERT INTO categories (c_name, c_parent) VALUES ('$c_name',$pcat_id)";
       $mysqli->query($query) or die(mysql_error());
-      //check for errors here ^ 
+   
      
   }  
   
