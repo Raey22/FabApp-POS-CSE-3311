@@ -41,36 +41,44 @@ function renderForm( $mysqli, $error)
           if($error != '') {
             echo '<div style="padding:4px; border:1px solid red; color:red;">'.$error.'</div>';
           }
+	//get the right id to use for the new material
               $result = $mysqli->query("SELECT MAX(m_id) FROM materials");
               $id = $result->fetch_assoc();
               $id = $id['MAX(m_id)']+ 1;
           ?>
-        
+        <!-- Id -->
           <form action="" method="post">
             <input type="hidden" name="id" value="<?php echo $id; ?>"/>
             <div>
               <p><strong>ID:</strong> <?php echo $id; ?></p>
             </div>
+		  
+	     <!-- Get material name -->
+
             <div class="form-group col-lg-12">
               <label for="materialName">Material Name:</label>
               <input type="text" class="form-control" id="materialName" placeholder="Enter name" name="m_name" required >
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
+           <!-- Get price -->
+
             <div class="form-group col-lg-4">
               <label for="materialPrice">Price:</label>
               <input type="text" class="form-control" id="materialPrice" placeholder="Enter price" name="price" >
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
+           <!-- Get Hex color -->
+
             <div class="form-group col-lg-4">
               <label for="colorHex">Color Hex:</label>
               <input type="text" class="form-control" id="colorHex" placeholder="Enter color ib hex" name="colorHex" >
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
+           <!-- Get Product Number -->
+
             <div class="form-group col-lg-12">
               <label for="materialProdNo">Product Number:</label>
               <input type="text" class="form-control" id="materialProdNo" placeholder="Enter product number" name="productNum" >
-              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
+            <!-- Get unit -->
+
             <div class="form-group col-lg-12">
               <label for="materialUnit">Unit:</label>
               <select class="form-control" name="unit" id="unit">
@@ -80,7 +88,8 @@ function renderForm( $mysqli, $error)
               </select>
           
             </div>
-            
+           <!-- Get Current -->
+
 
              <div class="form-group col-lg-4">
               <label for="currentInput">Current:</label>
@@ -89,6 +98,8 @@ function renderForm( $mysqli, $error)
                 <option value="N">No</option>
               </select>
             </div>
+	    <!-- Get Measurable -->
+
             <div class="form-group col-lg-4">
               <label for="measurableInput">Measurable:</label>
               <select class="form-control" name="measurable" id="measurable">
@@ -96,7 +107,7 @@ function renderForm( $mysqli, $error)
                 <option value="N">No</option>
               </select>
             </div>
-           
+           <!-- Get category -->
             <div class="col-lg-12">
             <label for="parentName" required >Parent Category:</label>
             <select class="form-control" name="pcat_id" id="pcat_id">
@@ -124,7 +135,7 @@ function renderForm( $mysqli, $error)
             
 			   </select>
             </div>
-
+ 	    <!-- Get reason for update -->
             <div class="col-lg-12">
               <div class="form-group">
                 <label for="reasonInput">Reason for Update</label>
@@ -150,6 +161,7 @@ function renderForm( $mysqli, $error)
 
 }
 
+//when the form gets submitted
 if (isset($_POST['submit']))
 {
   // confirm that the 'id' value is a valid integer before getting the form data
@@ -168,6 +180,7 @@ if (isset($_POST['submit']))
     $parentCat =  mysql_real_escape_string(htmlspecialchars($_POST['pcat_id']));
     $reasonInput =  mysql_real_escape_string(htmlspecialchars($_POST['reasonInput']));
    
+	//insert new material to the db
     
       $query = "INSERT INTO materials (m_name, m_parent,price,product_number,unit,color_hex,measurable,current,c_id,update_reason)
        VALUES ('$m_name',NULL,$price,'$productNum','$unit','$colorHex','$measurable','$current',$parentCat,$reasonInput)";
