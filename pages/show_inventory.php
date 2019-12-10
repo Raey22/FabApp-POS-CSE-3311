@@ -87,7 +87,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $staff->getRoleID() >= $sv['LvlOfLead
 
 			//Change this query to be dynamic
 			//TODO: input sanitation
+			//TODO: inventory price should be displayed instead of the price for the material 
 			
+			//combine the inventory with the materials to get the name of the materials 
 			$query = "SELECT *  FROM all_good_inventory as I INNER JOIN materials AS M ON I.m_id = M.m_id WHERE M.c_id = {$_GET['id']}";
 			if($result = $mysqli->query($query
             ))
