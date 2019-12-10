@@ -11,21 +11,15 @@
 
 ob_start();
 // get the Document Root path of fabapp, because $_SERVER['DOCUMENT_ROOT'] does not work in the cron file
-//
 
 $docRootPath='/opt/lampp/htdocs/fablab';
 
-
-// include_once ('/opt/lampp/htdocs/fablab/connections/db_connect8.php');
-// include_once ('/opt/lampp/htdocs/fablab/class/Notifications.php'); // so we can call the send mail function
 include_once ($docRootPath.'/connections/db_connect8.php');
 include_once ($docRootPath.'/class/Notifications.php'); // so we can call the send mail function
 
 date_default_timezone_set("America/Belize");  // to get the centrral time texas
 
 $date = date("m/d/Y h:i:sa");   // get the data and the hour
-//  echo $date;
-//$mysqli = new mysqli('localhost', 'Fablabian', 'jMhUG2HAD9ZXaUfU', 'fabapp') or die(mysql_error());
 
 //< Composed the body of the email
 $message1="<h2>Fablab Low Inventory Alert</h2>"."\r\n";
@@ -40,16 +34,8 @@ $message2="<table>
 <th>Quantity &nbsp; </th>
 <th>Current </th>
 </tr>";
-
-
-//if($result->fetch_assoc()){ 
-    $file = dirname(__FILE__).'/hello.txt';
-    $data = " w1 it s ".date('m/d/Y H:i:sa')."\n";
-    file_put_contents($file,$data,FILE_APPEND);                   
-//}
-
+          
 //< Query the oos_alert table, run each alert and send the email if possible
-$result = $mysqli->query("SELECT * FROM oos_alert as AO JOIN email as E ON AO.email_id = E.id_email") or die(mysql_error());;
 
 if ($result = $mysqli->query("
                     SELECT * FROM oos_alert as AO JOIN email as E ON AO.email_id = E.id_email  AND AO.is_active=1
@@ -77,12 +63,12 @@ if ($result = $mysqli->query("
                         }
                     }  
                         
-                        if ($result = $mysqli->query("
+                        if ($resultEach = $mysqli->query("
                         SELECT * FROM sheet_good_inventory AS SGI JOIN materials AS M ON SGI.inv_id=M.m_id
                         where quantity <= $min_qty AND M.current='Y' $c_query
                                         ")) {
                                         
-                            while ($row = $result->fetch_assoc()) { 
+                            while ($row = $resultEach->fetch_assoc()) { 
                                 $message2.="<tr>";
                                 $message2.="<th>".$row['m_name']."</th>";
                                 $message2.="<th>".$row['quantity']."</th>";
@@ -94,9 +80,12 @@ if ($result = $mysqli->query("
                             $conclusion="<p> <br>Thank you </p>";
                             $conclusion.="<p><small> <br>Please do not reply to this automated message. <small></p>";
                             $message=$message1.$message2.$conclusion;
-
+                             
+                            if(mysql_num_rows($resultEach) >= 1){
                             //$isMailSend=SendMailo($to, $subject, $message);
+                          
                             $isMailSend=Notifications::SendMail($to, $subject, $message);  //uncomment before commiting
+                            }  
                         }
             
                  // check if the Email was sent      
