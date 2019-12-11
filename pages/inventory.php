@@ -10,14 +10,6 @@
  //This will import all of the CSS and HTML code necessary to build the basic page
  include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 
- // //verify authentication access
- // if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
- //   //Not Authorized to see this Page
- //   $_SESSION['error_msg'] = "You are unable to view this page.";
- //   header('Location: /index.php');
- //   exit();
- // }
-
 ?>
 <html>
 	<head>
