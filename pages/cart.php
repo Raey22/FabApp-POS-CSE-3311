@@ -3,6 +3,7 @@
 *   CC BY-NC-AS UTA FabLab 2016-2018
 *   FabApp V 0.91
 *   Author: Khari Thomas
+*   Edited by: Glenda Robertson
 *
 *   Price calculations updated based on units by Glenda Robertson 11-5-19
 */
@@ -104,7 +105,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['refreshBtn'])) {
     WHERE AI.inv_id=$temp_inv AND AI.quantity != 0;
     ")) {
       while ($row = $result->fetch_assoc()) {
-//calculate price based on units
+        //calculate price based on units
         if($row['unit'] == "gram(s)")
         {
           $_SESSION['co_price'] = number_format((float)((($row['weight'] * $row['price'])* $_SESSION['co_quantity'][$v])+$_SESSION['co_price']), 2, '.', '');
