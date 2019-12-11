@@ -16,3 +16,9 @@ add a new line to execute the php script at the specified time
 save and exit crontab
 the script will be executed everyday a 8 am and 13 pm
 
+## Instructions for FabLab Team:
+  1. Download entire repository
+  2. Place pages/ directory and fablab.sql inside of www/ directory
+  3. Import fablab.sql to your database (this file has our new tables e.g. all_goods)
+  4. Run localhost
+
