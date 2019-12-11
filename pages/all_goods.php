@@ -3,8 +3,7 @@
 *   CC BY-NC-AS UTA FabLab 2016-2018
 *   FabApp V 0.91
 *   Author: Khari Thomas
-*
-*   Check if query should include M.measurable = 'Y'
+*   Edited by: Glenda Robertson
 *
 *   Price calculations updated based on units by Glenda Robertson 11-5-19
 */
