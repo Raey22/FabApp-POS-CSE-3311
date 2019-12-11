@@ -46,13 +46,6 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
           <div class="panel-heading">
           <i class="fas fa-warehouse"></i> All Goods Inventory
           </div>
-          
-
-          <!-- Search Bar
-          <div class="col-md-6">
-            <input type="text" class="form-control"  id="searchBar" onkeyup="searchTable()" placeholder="Search for materials..">
-          </div>
-          <br> -->
 
           <!-- /.panel-heading -->
           <div class="panel-body">
@@ -81,8 +74,6 @@ if (!$staff || $staff->getRoleID() < $sv['LvlOfStaff']){
                         <!-- Name -->
                         <td align="center"><?php echo($row['m_name']); ?><div class="color-box" style="background-color: #<?php echo($row['color_hex']);?>;"/>
                         </td>
-
-              
 
                         <!-- Cost -->
                         <?php if($row['unit'] == "gram(s)") { ?>
